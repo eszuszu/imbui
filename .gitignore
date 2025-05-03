@@ -12,6 +12,13 @@ dist
 dist-ssr
 *.local
 
+# public/content/  -- add once build pipeline finalized for static output
+*.tsbuildinfo
+
+# Vite cache
+.vite/
+
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
