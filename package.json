@@ -7,6 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-grove": "tsx --no-watch ./scripts/build-grove-content.ts",
+    "new-node": "tsx scripts/new-grovenode.ts",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
