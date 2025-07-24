@@ -13,14 +13,14 @@
 
 05/22/2025 - 05/23/2025
 - Starting to formalize API, architecture, and system
-Recent code implementations ready to go-`reactive.ts` and `reactive-primitives.ts` containing signals and effects for reactivity.`ServiceScope`, `ServiceRegistry`, general mixins.
+Recent code implementations ready to go-`reactive.ts` and `reactive-primitives.ts` containing signals and effects for reactivity.`ServiceScope`, `ServiceRegistry`, general mixins, `EntryDataService`, with basic method for single entry.
 
-Next steps: Implement feed manifest service, other services and Models Refine Base Web Component to offer either light or shadow dom focused templating(?), `<codex-entry>`, `<codex-feed>`, Context API and provider pattern implementation.
+Next steps: Implement feed manifest service, other services and Models Refine Base Web Component to offer either light or shadow dom focused templating(?), `<codex-feed>`, Context API and provider pattern implementation.
 
 Start to ideate on, make, and encourage patterns around routing, etc (this will often be dependent on which domain, e.g. dev, production, early build—and then, migrating to cloudflare D1 or KV, potentially later true backend). This is also to encourage parity—especially while iterating/developing—between static generation and enhancement/hydration behaviors.
 
 ## Data Models, Types, Interfaces
-  -...maybe `EntryData`, `ResourceMap`, certain signal types *to-implement*
+  -...maybe `EntryData`, `ResourceMap`, `FeedManifest`(?), perhaps canonnical 'interface' structures for expected dom templates or content, certain signal types *to-implement*
 
 ## Core Architectural Pattern: Pretty much Model-View-ViewModel (MVVM) w/ Web Components
   - Model (i.e. Services): Pure TypeScript classes for data fetching, caching, business logic, exposing reactive state - signals
@@ -36,7 +36,7 @@ Start to ideate on, make, and encourage patterns around routing, etc (this will 
   - `ServiceRegistry`: Global singleton: `register`, `get`, `has`, manages services
   - `ServiceScope`: `provide` `get`, `has`, `delete`, `fork`, allows global or scoped services, will be part of Context API, constructor includes optional `private parent?: ServiceScope`. subscribes the service to it's *internal* services. `get` 'recurses' through parents. `has` return true if the service has the key or it's parent has the key. `fork` returns true if the service has the key or it's parent does.
   - Dedicated Services: Clear *seperation of concerns*; e.g
-  - `EntryDataService` (for individual entry data or feed data)*to-implement*
+  - `EntryDataService` (for individual entry data or feed data)*touch base*
   - `FeedManifestService` (for lists of entry slugs/metadata), Model: role is to fetch and manage the 'manifest' or list of entries. e.g., entry slugs, titles, brief summaries, metadata, etc, for feed or index. *to-implement* *Doesn't fetch the full content of entries*, that's `EntryDataService`.
   - Caching: `FeedManifesService` holds fetched manifest privately, checks if the data is already in memory and fresh, fetches new or serves cached data.
   
@@ -46,23 +46,23 @@ Start to ideate on, make, and encourage patterns around routing, etc (this will 
   - Uses *Scoped Services*, `ServiceScope` in implementation(?)
   
 ## Components
-`<codex-entry>` *to-implement*
+`<codex-entry>` *touch base*
   - light ViewModel Orchestrator, ingress: signals, service injection?, uses `EntryDataService` to fetch the `entryData` for its slug. egress: might manage a signal for its own `entryData`: `Signal<EntryData>`
-  - methods: `connectedCallback` retrieves `EntryDataService`from the registry and calls `fetchAndPopulate(slug)` or similar method
-  - implement `fetchAndPopulate` to intelligently update its existing Light DOM elements based on fetched data. (for static, these elements are already there; for dynamic, they'll have been created by `codex-feed`)
+  - methods: `connectedCallback` retrieves `EntryDataService`from the registry and calls `fetchEntryBy(slug)` or similar method
+  - Orchestrates child components to intelligently update based on fetched data. (for static, these elements are already there; for dynamic, they'll have been created by `codex-feed`)
 
 `<codex-feed>` *to-implement*
   - ViewModel, Orchestrator, subscribes to a list of slugs (e.g., from `resource-map` attribute or another *feed manifest* service), manages a signal that represents the list of `EntryData` *objects* it wants to display (e.g. feedEntries: `Signal<EntryData[]>`).
-  - When it's resource-map changes (or it loads more slugs), it tells `EntryDataService` to `getEntries(newSlugs).`
+  - When it's resource-map/feed-manifest changes (or it loads more slugs), it tells `EntryDataService` to `getEntries(newSlugs).` *to-implement*
   - it then populates/updates its feedEntries signal
   - it renders `<codex-entry>` elements based on the feedEntries signal, passing individual `EntryData` objects down to them (as a property or they subscribe to a signal directly).
 
   - methods: `connectedCallback` & `renderFeed` for sure-> Identify existing static codex-entry elements, dynamically create new `<codex-entry>`
-elements as needed, cloning `<entry-ltpt>` for their light DOM, append new `codex-entry` elements to it's own light DOM.
+elements as needed, cloning `entry-ltpt` for their light DOM, append new `codex-entry` elements to it's own light DOM.
 
 `<entry-header>`, `<entry-content`>, `<entry-footer>`
   - pure views
-  - ingress: pieces of `EntryData` (e.g. headerData, contentData) as attributes/properties or by subscribing to the `<codex-entries>` `entryData` signal or similar. *needs review* with current behavior and possible extension to graceful adoption of signals, Context API pattern, or if attributes are enough.
+  - ingress: pieces of `EntryData` (e.g. headerData, contentData) as attributes/properties or by subscribing to the `<codex-entries>` `entryData` signal or similar. *needs review* with current behavior and possible extension to graceful adoption of signals, Context API pattern, etc.
   
 ## Web Component Design & Naming:
   - Componnent Templates: `[component]-stpl` (Shadow DOM content) and `[component]-ltpl` (for inititial Light DOM content—SSG, SSR, Hydration).
@@ -81,7 +81,7 @@ elements as needed, cloning `<entry-ltpt>` for their light DOM, append new `code
   - perform background network fetch to update the persistent storage and in-memory cache, design around this to reduce/remove data sync complexity and hydration issues
 
 ## More on Data Persistence and Refreshing *to-implement*
-  - `localStorage`: persistent user pref, cached data that can be stale, maybe full app state?
+  - `localStorage`: persistent user pref, cached data that can be stale, maybe full app state (theme, small state)?
   - `sessionStorage`: ephemeral state that persists across *tab refreshes* but not closing, reopening, or other finangling of the browser. current scroll position in a feed, temporary form data, other widget up funsy data. Later, user sessions
   - *URL Search Params* filters, search queries, currently viewed entry's ID. "Bookmarkable" state, state is rehaydrated when page loads.
   - *app initialization* needs to check `localStorage` or `sessionStorage` for saved state. When state changes, *debounce* any writes to `localStorage`.
@@ -89,8 +89,10 @@ elements as needed, cloning `<entry-ltpt>` for their light DOM, append new `code
   
 ## Error Handling
   - *to-do*
+  - Error service?
 ## Testing
   - *to-do*
+  - *touch base on when implementing my be worth*
   
 ## List Optimization (topics, moods, etc, later—component feeds, dynamic content and widgets, 'SPA' like behavior):
   - Keying: performance... List data should be arrays of objects, each with a *unique and stable ID (`data-key` attr on the rendered `<li>` elements).
@@ -100,6 +102,7 @@ elements as needed, cloning `<entry-ltpt>` for their light DOM, append new `code
   - formalize a plan for complex data passing or property passing
   - implement graceful and intuitive convention without too much setup
   - touch base with `data-bind` current implementation and ways to utilize, designate as idiom, or re-work into broader strategy if needed
+  - complex data will be passed via signals/effects, primitive data with observed attributes and attributeChangeCallback. Context API pattern to avoid prop drilling.
 
 ## Build Step
   - To-do... `JSDOM` for constructing static markup `data-bind` attribute for content generation, etc,~
