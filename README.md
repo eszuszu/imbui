@@ -22,6 +22,29 @@ Start to ideate on, make, and encourage patterns around routing, etc (this will 
 ## Data Models, Types, Interfaces
   -...maybe `EntryData`, `ResourceMap`, certain signal types *to-implement*
 
+## Core Architectural Pattern: Pretty much Model-View-ViewModel (MVVM) w/ Web Components
+  - Model (i.e. Services): Pure TypeScript classes for data fetching, caching, business logic, exposing reactive state - signals
+  - View (UI First Web Components): "Dumb" ingress components, concerned with rendering data received (signals, maybe props) and emitting user interaction events. Manage their own Shadow DOM and slots for composition.
+  - ViewModel (Orchestrator/Stateful Web Components): Components that act as a bridge, they can map reactive UI state signals, orchestrate child components, encapsulate context, and interact with Services based on user input or data changing.
+
+## Data Flow & Reactivity:
+  - Signals and Effects: Services expose data as Signals. Components (Views and ViewModels) subscribe to these Signals using Effects, which trigger DOM updates.
+  - Data Ingress (to components): Properties (complex data/signals), Attributes (for simple primitives), or direct Service Subscription (for components consuming Global Service data).
+  - Data Egress (from components): Custom Events (for user interactions or to notify higher-level components/services)
+
+## Service Architecture:
+  - `ServiceRegistry`: Global singleton: `register`, `get`, `has`, manages services
+  - `ServiceScope`: `provide` `get`, `has`, `delete`, `fork`, allows global or scoped services, will be part of Context API, constructor includes optional `private parent?: ServiceScope`. subscribes the service to it's *internal* services. `get` 'recurses' through parents. `has` return true if the service has the key or it's parent has the key. `fork` returns true if the service has the key or it's parent does.
+  - Dedicated Services: Clear *seperation of concerns*; e.g
+  - `EntryDataService` (for individual entry data or feed data)*to-implement*
+  - `FeedManifestService` (for lists of entry slugs/metadata), Model: role is to fetch and manage the 'manifest' or list of entries. e.g., entry slugs, titles, brief summaries, metadata, etc, for feed or index. *to-implement* *Doesn't fetch the full content of entries*, that's `EntryDataService`.
+  - Caching: `FeedManifesService` holds fetched manifest privately, checks if the data is already in memory and fresh, fetches new or serves cached data.
+  
+## Context API:
+  - Purpose: To prevent "prop drilling" and provide scoped, shared state/services
+  - Mechanism: Uses a custom bubbling event (`ContextRequestEvent` with `bubbles: true`, `composed: true`) containing a unique `Symbol` (the `ContextKey`) and a callback function. The nearest ContextProvider responds by invoking the callback with the requested Signal/value and calls `event.stopPropagation()`. Consumers set up Effects to react to the received Context Signal.
+  - Uses *Scoped Services*, `ServiceScope` in implementation(?)
+  
 ## Components
 `<codex-entry>` *to-implement*
   - light ViewModel Orchestrator, ingress: signals, service injection?, uses `EntryDataService` to fetch the `entryData` for its slug. egress: might manage a signal for its own `entryData`: `Signal<EntryData>`
@@ -40,24 +63,13 @@ elements as needed, cloning `<entry-ltpt>` for their light DOM, append new `code
 `<entry-header>`, `<entry-content`>, `<entry-footer>`
   - pure views
   - ingress: pieces of `EntryData` (e.g. headerData, contentData) as attributes/properties or by subscribing to the `<codex-entries>` `entryData` signal or similar. *needs review* with current behavior and possible extension to graceful adoption of signals, Context API pattern, or if attributes are enough.
-
-## Core Architectural Pattern: Pretty much Model-View-ViewModel (MVVM) w/ Web Components
-  - Model (i.e. Services): Pure TypeScript classes for data fetching, caching, business logic, exposing reactive state - signals
-  - View (UI First Web Components): "Dumb" ingress components, concerned with rendering data received (signals, maybe props) and emitting user interaction events. Manage their own Shadow DOM and slots for composition.
-  - ViewModel (Orchestrator/Stateful Web Components): Components that act as a bridge, they can map reactive UI state signals, orchestrate child components, encapsulate context, and interact with Services based on user input or data changing.
-
-## Data Flow & Reactivity:
-  - Signals and Effects: Services expose data as Signals. Components (Views and ViewModels) subscribe to these Signals using Effects, which trigger DOM updates.
-  - Data Ingress (to components): Properties (complex data/signals), Attributes (for simple primitives), or direct Service Subscription (for components consuming Global Service data).
-  - Data Egress (from components): Custom Events (for user interactions or to notify higher-level components/services)
-
-## Service Architecture:
-  - `ServiceRegistry`: Global singleton: `register`, `get`, `has`, manages services
-  - `ServiceScope`: `provide` `get`, `has`, `delete`, `fork`, allows global or scoped services, will be part of Context API, constructor includes optional `private parent?: ServiceScope`. subscribes the service to it's *internal* services. `get` 'recurses' through parents. `has` return true if the service has the key or it's parent has the key. `fork` returns true if the service has the key or it's parent does.
-  - Dedicated Services: Clear *seperation of concerns*; e.g
-  - `EntryDataService` (for individual entry data or feed data)*to-implement*
-  - `FeedManifestService` (for lists of entry slugs/metadata), Model: role is to fetch and manage the 'manifest' or list of entries. e.g., entry slugs, titles, brief summaries, metadata, etc, for feed or index. *to-implement* *Doesn't fetch the full content of entries*, that's `EntryDataService`.
-  - Caching: `FeedManifesService` holds fetched manifest privately, checks if the data is already in memory and fresh, fetches new or serves cached data.
+  
+## Web Component Design & Naming:
+  - Componnent Templates: `[component]-stpl` (Shadow DOM content) and `[component]-ltpl` (for inititial Light DOM content—SSG, SSR, Hydration).
+  - Mixins, interface `CustomElementLifecycleMethods` & type `WebComponentConstructor` for implementing web component mixins
+  - `ReactiveWebComponentMixin`, for creating effect, effect cleanup
+  - `BaseWebComponent` currently attaches an open shadow and appends a `*-stpl` template 
+  - `[component]-provider` clear convention for components whose primary role is to establish a *Context API* (injecting scoped services or shared state) into their subtree.
 
 ## Caching Strategies:
   - "Stale-While-Revalidate", immediately return the cached data, concurrently initiate a background network fetch, once data arrives, update the cache and trigger reactivity. Need to reason about "stale" and "fresh" data.
@@ -79,18 +91,6 @@ elements as needed, cloning `<entry-ltpt>` for their light DOM, append new `code
   - *to-do*
 ## Testing
   - *to-do*
-
-## Web Component Design & Naming:
-  - Componnent Templates: `[component]-stpl` (Shadow DOM content) and `[component]-ltpl` (for inititial Light DOM content—SSG, SSR, Hydration).
-  - Mixins, interface `CustomElementLifecycleMethods` & type `WebComponentConstructor` for implementing web component mixins
-  - `ReactiveWebComponentMixin`, for creating effect, effect cleanup
-  - `BaseWebComponent` currently attaches an open shadow and appends a `*-stpl` template 
-  - `[component]-provider` clear convention for components whose primary role is to establish a *Context API* (injecting scoped services or shared state) into their subtree.
-
-## Context API:
-  - Purpose: To prevent "prop drilling" and provide scoped, shared state/services
-  - Mechanism: Uses a custom bubbling event (`ContextRequestEvent` with `bubbles: true`, `composed: true`) containing a unique `Symbol` (the `ContextKey`) and a callback function. The nearest ContextProvider responds by invoking the callback with the requested Signal/value and calls `event.stopPropagation()`. Consumers set up Effects to react to the received Context Signal.
-  - Uses *Scoped Services*, `ServiceScope` in implementation(?)
   
 ## List Optimization (topics, moods, etc, later—component feeds, dynamic content and widgets, 'SPA' like behavior):
   - Keying: performance... List data should be arrays of objects, each with a *unique and stable ID (`data-key` attr on the rendered `<li>` elements).
