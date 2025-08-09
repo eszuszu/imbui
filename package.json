@@ -1,29 +1,19 @@
 {
-  "name": "codex-grove",
+  "name": "codex-grove-monorepo",
   "version": "1.0.0",
-  "description": "Codex Grove - Living Library | Digital Garden",
-  "type": "module",
-  "main": "index.js",
+  "description": "Monorepo for the Codex Grove app and shared libraries",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build-grove": "tsx --no-watch ./scripts/build-grove-content.ts",
-    "new-node": "tsx scripts/new-grovenode.ts",
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "pnpm --filter codex-grove dev",
+    "build": "pnpm --filter codex-grove build",
+    "lint": "pnpm --filter \"./packages/**\" lint",
+    "text": "pnpm --filter \"./packages/**\" test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.8.1",
   "devDependencies": {
-    "@types/node": "^22.15.2",
     "typescript": "^5.8.3",
-    "vite": "^6.3.3"
-  },
-  "dependencies": {
-    "gray-matter": "^4.0.3",
-    "marked": "^15.0.11",
-    "tsx": "^4.19.3"
+    "@types/node": "^22.15.2"
   }
 }

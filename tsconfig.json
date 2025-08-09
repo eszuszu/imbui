@@ -23,10 +23,21 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    "declaration": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "@imbui/core": ["./packages/core/src"],
+      "@imbui/infuse": ["./packages/infuse/src"],
+      "@imbui/pulse": ["./packages/pulse/src"]
+    }
   },
   "include": [
-    "src",
-    "scripts/build-grove-content.ts",
+    "apps",
+    "packages",
   ]
 }

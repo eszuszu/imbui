@@ -1,0 +1,29 @@
+{
+  "name": "@imbui/pulse",
+  "version": "0.0.1",
+  "description": "The pulse library for signal and effect reactive primitives",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "imports": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2",
+    "vite": "^6.3.3"
+  },
+  "dependencies": {
+    "@imbui/pulse": "workspace:*"
+  },
+  "keywords": [],
+  "author": "me",
+  "license": "ISC"
+}

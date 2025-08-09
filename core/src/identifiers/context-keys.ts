@@ -1,0 +1,1 @@
+export const SERVICE_SCOPE_CONTEXT_KEY = Symbol('ServiceScopeContext');
