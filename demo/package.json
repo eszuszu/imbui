@@ -1,0 +1,21 @@
+{
+  "name": "imbui-demo",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview"
+  },
+  "dependencies": {
+    "@imbui/core": "workspace:*",
+    "@imbuil/infuse": "workspace:*",
+    "@imbui/pulse": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "@types/node": "^22.15.2",
+    "vite": "^6.3.3"
+  }
+}
