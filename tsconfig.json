@@ -31,13 +31,12 @@
 
     "baseUrl": ".",
     "paths": {
-      "@imbui/core": ["./packages/core/src"],
-      "@imbui/infuse": ["./packages/infuse/src"],
-      "@imbui/pulse": ["./packages/pulse/src"]
+      "@imbui/*": ["./*/src"],
     }
   },
   "include": [
-    "apps",
-    "packages",
+    "core/**/*.ts",
+    "pulse/**/*.ts",
+    "infuse/**/*.ts"
   ]
 }

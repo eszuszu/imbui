@@ -1,19 +1,21 @@
 {
-  "name": "codex-grove-monorepo",
-  "version": "1.0.0",
-  "description": "Monorepo for the Codex Grove app and shared libraries",
+  "name": "imbui-monorepo",
+  "version": "0.0.0",
+  "description": "Monorepo for the imbui toolkit and related libraries",
   "private": true,
   "scripts": {
-    "dev": "pnpm --filter codex-grove dev",
-    "build": "pnpm --filter codex-grove build",
-    "lint": "pnpm --filter \"./packages/**\" lint",
-    "text": "pnpm --filter \"./packages/**\" test"
+    "build": "pnpm -r build"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Elizabeth Schwartz",
+  "license": "MIT",
+  "packageManager": "pnpm@10.8.1",
   "devDependencies": {
     "typescript": "^5.8.3",
-    "@types/node": "^22.15.2"
+    "@types/node": "^22.15.2",
+    "vite": "^6.3.3"
+  },
+  "engines": {
+    "node": "^22.11.0"
   }
 }

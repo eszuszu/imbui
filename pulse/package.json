@@ -24,6 +24,6 @@
     "@imbui/pulse": "workspace:*"
   },
   "keywords": [],
-  "author": "me",
-  "license": "ISC"
+  "author": "Elizabeth Schwartz",
+  "license": "MIT"
 }
