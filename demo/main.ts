@@ -1,7 +1,5 @@
 import {
   BaseWebComponentMixin,
-  ElementalWebComponentMixin,
-  ReactiveWebComponentMixin,
   infuse
 } from "@imbui/infuse";
 
