@@ -18,7 +18,8 @@
   },
   "devDependencies": {
     "typescript": "^5.9.2",
-    "vite": "^6.3.3"
+    "vite": "^6.3.3",
+    "vite-plugin-dts": "^4.5.4"
   },
   "dependencies": {
     "@imbui/pulse": "workspace:*"

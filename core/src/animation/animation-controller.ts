@@ -12,7 +12,6 @@ export class AnimationController {
   private _animation: Animation;
   private _progressSignal: Signal<number>; //0.0 to 1.0, think runtime enforcement
   private _playStateSignal: Signal<AnimationPlayState>;
-  private _cachedDirection: PlaybackDirection;
   private _pausedReasons: Set<'global' | 'component'> = new Set();
 
   private _cleanupGlobalPauseEffect: (() => void) | null = null;
@@ -35,7 +34,6 @@ export class AnimationController {
     );
 
     this._playStateSignal = signal(this._animation.playState);
-    this._cachedDirection = this._animation.effect?.getTiming().direction || 'normal';
 
     this._animation.onfinish = () => {
       this._playStateSignal.set('finished');
@@ -130,7 +128,6 @@ export class AnimationController {
       this._animation.reverse();
       this._playStateSignal.set(this._animation.playState);
       this._playStateSignal.set(this._animation.playState);
-      this._cachedDirection = this._animation.effect?.getTiming().direction || 'normal';
       this._pausedReasons.clear();
       
     }

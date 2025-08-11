@@ -1,4 +1,4 @@
-import { getKeyframeEffect, getDefaultEffectOptions, type KeyframeDefinition } from "./keyframe-definitions";
+import { getKeyframeEffect, getDefaultEffectOptions } from "./keyframe-definitions";
 import { AnimationController } from "./animation-controller";
 import type { LoggerService } from "../services/logger-service";
 

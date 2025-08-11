@@ -22,7 +22,7 @@ type WebComponentInstance = HTMLElement & ReactiveWebComponentInterface & Attrib
 // This is a decorator function for reflecting attributes to and from the DOM in web components, in vite dev, 'ES2022' is needed for esbuild.target in defineConfig
 export function attribute(attributeName?: string, typeHint: 'boolean' | 'string' = 'string') {
   return <T extends WebComponentInstance, Value>(
-    target: ClassAccessorDecoratorTarget<T, Value>,
+    _target: ClassAccessorDecoratorTarget<T, Value>,
     context: ClassAccessorDecoratorContext<T, Value>
   ): ClassAccessorDecoratorResult<T, Value> => {
     const propKey = String(context.name);

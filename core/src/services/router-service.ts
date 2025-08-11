@@ -68,7 +68,7 @@ export class RouterService {
 
   // --- private methods
 
-  private _handlePopState(event: PopStateEvent): void {
+  private _handlePopState(): void {
     this._logger.log('Popstate event triggered. Handling location change.');
     this._handleLocationChange(window.location.pathname);
   }

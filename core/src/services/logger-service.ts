@@ -1,3 +1,8 @@
+/// <reference types="vite/client" />
+
+// NOTE: This file is a work in progress and may change.
+// it will likely be broken up into a dbug service and a logger service.
+
 export class LoggerService {
   log(...args: any[]) {
     console.log("[LOG]", ...args);
@@ -12,7 +17,7 @@ export class LoggerService {
   }
 
   debug(...args: any[]) {
-    if (import.meta.env.DEV) console.debug("[DEBUG]", ...args); //need to review vite.config and d.ts, as well as package.json
+    if (import.meta.env.DEV) console.debug("[DEBUG]", ...args); //vite meta.env
   }
 
   scope(scopeName: string): ScopedLogger {

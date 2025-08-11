@@ -2,6 +2,7 @@
   "name": "@imbui/core",
   "version": "0.0.1",
   "description": "The Imbui framework for custom element based web components and applications",
+  "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -18,11 +19,12 @@
   },
   "devDependencies": {
     "typescript": "^5.9.2",
-    "vite": "^6.3.3"
+    "vite": "^6.3.3",
+    "vite-plugin-dts": "^4.5.4"
   },
   "dependencies": {
-    "@imbui/pulse": "workspace:*",
-    "@imbui/infuse": "workspace:*"
+    "@imbui/infuse": "workspace:*",
+    "@imbui/pulse": "workspace:*"
   },
   "keywords": [],
   "author": "Elizabeth Schwartz",

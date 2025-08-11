@@ -10,7 +10,7 @@ import { signal } from "@imbui/pulse";
 export function signalProperty<T>(initialValue: T) {
   return function (
     _target: undefined,
-    context: ClassFieldDecoratorContext
+    _context: ClassFieldDecoratorContext
   ): (this: any) => Signal<T> {
     return function (this: any) {
       const newSignal = signal(initialValue);
