@@ -6,7 +6,8 @@ export default tseslint.config(
   {
     ignores: [
       "eslint.config.js",
-      "**/dist/**"
+      "**/dist/**",
+      "**/demo/**"
     ],
   },
   eslint.configs.recommended,
