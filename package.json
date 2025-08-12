@@ -4,15 +4,19 @@
   "description": "Monorepo for the imbui toolkit and related libraries",
   "private": true,
   "scripts": {
-    "build": "pnpm -r build"
+    "build": "pnpm -r build",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "keywords": [],
   "author": "Elizabeth Schwartz",
   "license": "MIT",
-  "packageManager": "pnpm@10.8.1",
+  "packageManager": "pnpm@10.14.0",
   "devDependencies": {
-    "typescript": "^5.8.3",
     "@types/node": "^22.15.2",
+    "@typescript-eslint/eslint-plugin": "^8.39.1",
+    "@typescript-eslint/parser": "^8.39.1",
+    "eslint": "^9.33.0",
+    "typescript": "^5.8.3",
     "vite": "^6.3.3"
   },
   "engines": {
