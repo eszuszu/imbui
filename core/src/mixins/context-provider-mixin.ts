@@ -15,6 +15,7 @@ export const ContextProviderMixin = <TBase extends WebComponentConstructor<HTMLE
     // flag to indicate if the scope has been explicitly set as root
     public _isRootScopeExplicitlySet: boolean = false;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
       super(...args);
       this._scopeInitializedPromise = new Promise(resolve => {
@@ -42,7 +43,7 @@ export const ContextProviderMixin = <TBase extends WebComponentConstructor<HTMLE
     }
 
     connectedCallback() {
-      super.connectedCallback && super.connectedCallback();
+      super.connectedCallback?.();
 
       //Only attempt to request a parent scope and fork if the scope
       //hasn't been explicitly set as the root

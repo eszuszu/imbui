@@ -4,7 +4,10 @@ import eslint from "@eslint/js";
 
 export default tseslint.config(
   {
-    ignores: ["eslint.config.js"],
+    ignores: [
+      "eslint.config.js",
+      "**/dist/**"
+    ],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,

@@ -4,7 +4,8 @@
     "useDefineForClassFields": true,
     "module": "ESNext",
     "types": [
-      "node"
+      "node",
+      "vite/client"
     ],
     "lib": [
       "ES2020",
@@ -35,7 +36,7 @@
   "include": [
     "core/**/*.ts",
     "pulse/**/*.ts",
-    "infuse/**/*.ts"
+    "infuse/**/*.ts",
   ],
   "exclude": ["eslint.config.js", "node_modules"]
 }

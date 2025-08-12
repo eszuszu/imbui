@@ -23,6 +23,7 @@ interface SWRFetcherOptions<T> {
   fetchFunction: (key: string) => Promise<T>;
   staleTime?: number; //how long data is considered fresh
   name?: string; //name for logging purposes
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   logger?: any;
 }
 
@@ -37,6 +38,7 @@ export function createSWRFetcher<T>(options: SWRFetcherOptions<T>): SWRFetcherSt
   const isLoadingSignal = signal(false);
   const errorSignal = signal<Error | null>(null);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const log = (level: 'log' | 'error', ...args: any[]) => {
     if (logger) {
       logger[level](`[${name}]`, ...args);

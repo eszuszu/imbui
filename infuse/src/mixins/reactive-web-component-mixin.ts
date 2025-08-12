@@ -7,11 +7,13 @@ export const ReactiveWebComponentMixin = <TBase extends WebComponentConstructor>
 
   const ReactiveWebComponentClass = class extends Base {
     static observedAttributes: string[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public _reactiveSignals = new Map<PropertyKey, Signal<any>>();
     public _attributeObservers = new Map<string, (value: string | null) => void>();
     //a Set for the unsubscribe—i.e. `cleanup()`—function for effects
     public _effectCleanups: Set<() => void> = new Set();
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
       super(...args);
     }

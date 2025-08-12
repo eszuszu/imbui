@@ -13,6 +13,7 @@ export const ElementalWebComponentMixin = <TBase extends WebComponentConstructor
 
     public updatableElements: Record<string, HTMLElement> = {};
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
       super(...args);
     }

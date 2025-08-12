@@ -1,46 +1,51 @@
-/// <reference types="vite/client" />
-
-// NOTE: This file is a work in progress and may change.
-// it will likely be broken up into a dbug service and a logger service.
+// This file uses 'any' for logging arguments as their types are unpredictable.
+// We disable the ESLint rule for these specific functions to allow this.
 
 export class LoggerService {
-  log(...args: any[]) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public log(...args: any[]) {
     console.log("[LOG]", ...args);
   }
 
-  warn(...args: any[]) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public warn(...args: any[]) {
     console.warn("[WARN]", ...args);
   }
 
-  error(...args: any[]) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public error(...args: any[]) {
     console.error("[ERROR]", ...args);
   }
 
-  debug(...args: any[]) {
-    if (import.meta.env.DEV) console.debug("[DEBUG]", ...args); //vite meta.env
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public debug(...args: any[]) {
+    if (import.meta.env.DEV) console.debug("[DEBUG]", ...args);
   }
 
-  scope(scopeName: string): ScopedLogger {
+  public scope(scopeName: string): ScopedLogger {
     return new ScopedLogger(scopeName, this);
   }
 }
 
 class ScopedLogger {
-  constructor (
+  constructor(
     private scopeName: string,
     private logger: LoggerService
-  ) {}
-
-  log(...args: any[]) {
+  ) { }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public log(...args: any[]) {
     this.logger.log(`[${this.scopeName}]`, ...args);
   }
-  warn(...args: any[]) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public warn(...args: any[]) {
     this.logger.warn(`[${this.scopeName}]`, ...args);
   }
-  error(...args: any[]) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public error(...args: any[]) {
     this.logger.error(`[${this.scopeName}]`, ...args);
   }
-  debug(...args: any[]) {
-    this.logger.log(`[${this.scopeName}]`, ...args);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public debug(...args: any[]) {
+    this.logger.debug(`[${this.scopeName}]`, ...args); // Corrected to use debug()
   }
 }

@@ -12,7 +12,8 @@ export const BaseWebComponentMixin = <TBase extends WebComponentConstructor>(Bas
     }
 
     declare observedAttributes: string[];
-
+    
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
       super(...args);
   

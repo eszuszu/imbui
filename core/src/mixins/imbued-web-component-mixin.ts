@@ -16,8 +16,9 @@ export const ImbuedWebComponentMixin = <TBase extends WebComponentConstructor<HT
 
     public _servicesReadyPromise: Promise<void>;
     public _resolveServicesReady!: () => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public _rejectServicesReady!: (reason?: any) => void;
-
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
       super(...args);
 
@@ -64,6 +65,7 @@ export const ImbuedWebComponentMixin = <TBase extends WebComponentConstructor<HT
             const errorMsg = `[${this.tagName}] failed to assign one or more required services: ${missingServices}`;
             this._rejectServicesReady(new Error(errorMsg));
           }
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
           console.error(`[${this.tagName}] Failed to retrieve a required service from scope:`, error);
           this._rejectServicesReady(error);

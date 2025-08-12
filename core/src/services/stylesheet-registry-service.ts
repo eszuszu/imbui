@@ -39,8 +39,8 @@ export class StylesheetRegistryService {
   }
 
   /**
-   * Registers a CSS string as a new Constructable STylesheet.
-   * Overwrites if a stylesheet witht he same key already exists.
+   * Registers a CSS string as a new Constructable Stylesheet.
+   * Caution: Overwrites if a stylesheet with the same key already exists.
    */
   public registerCssString(key: string, cssString: string) {
     if (this._stylesheets.has(key)) {
@@ -57,6 +57,7 @@ export class StylesheetRegistryService {
   }
 
   /**
+   * Experimental API, use with caution, needs review
    * Converts document stylesheets (from <link> or <style> tags) into
    * Constructable Stylesheets and registers them.
    */
@@ -68,10 +69,11 @@ export class StylesheetRegistryService {
       // Only process CSSStyleSheet instances and those with rules or a href (to avoid empty/unloaded sheets)
       // And importantly, skip sheets that might already be constructable (e.g., if a polyfill is active, or dynamically created by other means)
       // The `adopted` property is non-standard but often used by polyfills.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (sheet instanceof CSSStyleSheet && (sheet.href !== null || sheet.cssRules.length > 0) && !(sheet as any).adopted) {
         
         let name: string;
-        let cssSlug = sheet.href ? new URL(sheet.href).pathname.split('/').pop() : null;
+        const cssSlug = sheet.href ? new URL(sheet.href).pathname.split('/').pop() : null;
 
         if (cssSlug === 'root.css') {
           name = `root`
@@ -137,6 +139,7 @@ export class StylesheetRegistryService {
   }
 
   /**
+   * Experimental API use with caution
    * Scans document.styleSheets again to add new ones or update existing ones.
    * Also removes stylesheets that are no longer present in the document.
    */
@@ -145,10 +148,11 @@ export class StylesheetRegistryService {
     let index = 0;
 
     for (const sheet of document.styleSheets) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (sheet instanceof CSSStyleSheet && (sheet.href !== null || sheet.cssRules.length > 0) && !(sheet as any).adopted) {
 
         let name: string;
-        let cssSlug = sheet.href ? new URL(sheet.href).pathname.split('/').pop() : null;
+        const cssSlug = sheet.href ? new URL(sheet.href).pathname.split('/').pop() : null;
 
         if (cssSlug === 'root.css') {
           name = 'root';
@@ -194,7 +198,7 @@ export class StylesheetRegistryService {
         const isPresent = Array.from(document.styleSheets).some(
           docSheet => {
             let docSheetName: string;
-            let docCssSlug = docSheet.href ? new URL(docSheet.href).pathname.split('/').pop() : null;
+            const docCssSlug = docSheet.href ? new URL(docSheet.href).pathname.split('/').pop() : null;
             if (docCssSlug === 'root.css') { docSheetName = 'root'; }
             else if (docCssSlug) { docSheetName = `linked-${docCssSlug}`; }
             else { docSheetName = `inline-${Array.from(document.styleSheets).indexOf(docSheet)}`}
