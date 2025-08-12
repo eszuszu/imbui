@@ -36,5 +36,6 @@
     "core/**/*.ts",
     "pulse/**/*.ts",
     "infuse/**/*.ts"
-  ]
+  ],
+  "exclude": ["eslint.config.js", "node_modules"]
 }
