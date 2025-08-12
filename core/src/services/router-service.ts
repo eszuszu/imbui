@@ -24,7 +24,6 @@ export class RouterService {
     this.currentRoute = signal<CurrentRouteState>({ config: null, params: {}, path: '' });
     this.isLoading = signal(false);
     this._handlePopState = this._handlePopState.bind(this);
-
   }
 
   // --- Public API ---
@@ -52,7 +51,11 @@ export class RouterService {
       return;
     }
 
-    replaceState ? window.history.replaceState(null, '', to) : window.history.pushState(null, '', to);
+    if (replaceState) {
+      window.history.replaceState(null, '', to);
+    } else {
+      window.history.pushState(null, '', to);
+    }
 
     this._logger.log(`Navigating to : ${to} (Programmatic)`);
     this._handleLocationChange(to);
@@ -72,7 +75,6 @@ export class RouterService {
     this._logger.log('Popstate event triggered. Handling location change.');
     this._handleLocationChange(window.location.pathname);
   }
-
 
 
   /**
