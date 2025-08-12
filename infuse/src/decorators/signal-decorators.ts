@@ -3,15 +3,15 @@ import { signal } from "@imbui/pulse";
 
 /**
  * Decorator to automatically initialize a class field as a Signal.
- * Usage:
+ * Usage: Legacy, use signalAccessor()
  * @signalProperty(initialValue)
  * public myProp!: Signal<Type>;
  */
 export function signalProperty<T>(initialValue: T) {
   return function (
-    _target: undefined,
-    _context: ClassFieldDecoratorContext
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): (this: any) => Signal<T> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return function (this: any) {
       const newSignal = signal(initialValue);
       return newSignal;

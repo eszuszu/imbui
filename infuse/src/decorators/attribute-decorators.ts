@@ -15,7 +15,7 @@ interface AttributeMethods {
   hasAttribute(name: string): boolean;
   getAttribute(name: string): string | null;
 }
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type WebComponentInstance = HTMLElement & ReactiveWebComponentInterface & AttributeMethods & CustomElementLifecycleMethods & { [key: string]: any };
 
 
