@@ -5,7 +5,8 @@
     "module": "ESNext",
     "types": [
       "node",
-      "vite/client"
+      "vite/client",
+      "vitest/globals"
     ],
     "lib": [
       "ES2020",

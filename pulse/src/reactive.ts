@@ -2,7 +2,27 @@ import type { Signal, EffectFn, EffectRunner } from "./types/reactive-primitives
 
 //A pointer to the current effect and a closure over it's dependencies
 let currentEffect: EffectRunner | null = null;
+const pendingEffects = new Set<EffectRunner>();
+let isFlushing = false;
 //
+
+// Function to run all pending effects in a single microtask
+function flush() {
+  if (isFlushing) {
+    return;
+  }
+  isFlushing = true;
+  Promise.resolve().then(() => {
+    while (pendingEffects.size > 0) {
+      const effectsToRun = [...pendingEffects];
+      pendingEffects.clear();
+      for (const runner of effectsToRun) {
+        runner();
+      }
+    }
+    isFlushing = false;
+  });
+}
 
 export function effect(fn: EffectFn): () => void {
   const runner: EffectRunner = (() => {
@@ -17,14 +37,13 @@ export function effect(fn: EffectFn): () => void {
     } finally {
       currentEffect = null;
     }
-    //clear the currentEffect pointer
-    currentEffect = null;
   }) as EffectRunner;
 
   //create new set for this effect's dependencies
   runner.deps = new Set();
-  //call the effect runner function for initial setup and tracking
+
   runner();
+
   //run the cleanup function and return
   return () => cleanup(runner);
 }
@@ -58,10 +77,11 @@ export function signal<T>(initial: T): Signal<T> {
     if (Object.is(value, next)) return;
 
     value = next;
-    // copies subscribers first & re-runs all subscribers
-    for (const fn of [...subscribers]) {
-      fn();
+
+    for (const fn of subscribers) {
+      pendingEffects.add(fn);
     }
+    flush();
   }
 
   return {
@@ -75,11 +95,17 @@ export function signal<T>(initial: T): Signal<T> {
 
 //basic computed incapsulated signal subscribes to internal signal w/ effect.
 export function computed<T>(fn: () => T) {
-  const initialValue = fn();
-  const internal = signal<T>(initialValue);
-  effect(
-    () => internal.set(fn())
-  );
+  let value = fn();
+  const internal = signal<T>(value);
+
+  effect(() => {
+    const newValue = fn();
+    if (!Object.is(newValue, value)) {
+      value = newValue;
+      internal.set(value);
+    }
+  });
+
   return {
     get: internal.get
   };
