@@ -14,6 +14,15 @@ export default defineConfig({
       external: ['@imbui/pulse'],
     },
   },
+  test: {
+    environment: 'jsdom',
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      reportsDirectory: './coverage',
+      exclude: ['node_modules', 'dist', '**/demo/**']
+    },
+  },
   plugins: [
     dts({
       insertTypesEntry: true,
