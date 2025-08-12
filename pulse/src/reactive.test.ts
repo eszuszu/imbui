@@ -19,7 +19,7 @@ describe('reactive primitives', () => {
       expect(value).toBe(initialValue);
     });
 
-    it('should update the value and return the new value', async () => {
+    it('should update the value and return the new value', () => {
       //Arrange
       const mySignal = signal(0);
       const newValue = 100;
@@ -30,6 +30,7 @@ describe('reactive primitives', () => {
       expect(value).toBe(newValue)
     });
   });
+
 
   //Basic tests for effect
   describe('effect', () => {
@@ -130,9 +131,6 @@ describe('reactive primitives', () => {
       b.set(20);
 
       // First flush handles the computed's update
-      await vi.runAllTimersAsync();
-
-      // Second flush handles the effectCallback's update, which was queued by the computed's update
       await vi.runAllTimersAsync();
 
       //Assert
