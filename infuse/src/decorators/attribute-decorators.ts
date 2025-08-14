@@ -1,7 +1,7 @@
 import { CustomElementLifecycleMethods } from "../mixins/types";
 import type { Signal } from "@imbui/pulse";
 
-interface ReactiveWebComponentInterface {
+export interface ReactiveWebComponentInterface {
   registerAttributeObserver(attribute: string, handler: (value: string | null) => void): void;
   _registerReactiveSignal<PropType>(propName: PropertyKey, initialValue: PropType): Signal<PropType>;
   _getReactiveSignal<PropType>(propName: PropertyKey): Signal<PropType> | undefined;
@@ -16,10 +16,10 @@ interface AttributeMethods {
   getAttribute(name: string): string | null;
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type WebComponentInstance = HTMLElement & ReactiveWebComponentInterface & AttributeMethods & CustomElementLifecycleMethods & { [key: string]: any };
+export type WebComponentInstance = HTMLElement & ReactiveWebComponentInterface & AttributeMethods & CustomElementLifecycleMethods & { [key: string]: any };
 
 
-// This is a decorator function for reflecting attributes to and from the DOM in web components, in vite dev, 'ES2022' is needed for esbuild.target in defineConfig
+// This is a accessor decorator function for reflecting attributes to and from the DOM in web components, in vite dev, 'ES2022' is needed for esbuild.target in defineConfig
 export function attribute(attributeName?: string, typeHint: 'boolean' | 'string' = 'string') {
   return <T extends WebComponentInstance, Value>(
     _target: ClassAccessorDecoratorTarget<T, Value>,
