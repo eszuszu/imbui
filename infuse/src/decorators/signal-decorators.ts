@@ -3,7 +3,7 @@ import { signal } from "@imbui/pulse";
 
 /**
  * Decorator to automatically initialize a class field as a Signal.
- * Usage: Legacy, use signalAccessor()
+ * Usage: Legacy, use signalAccessor() instead.
  * @signalProperty(initialValue)
  * public myProp!: Signal<Type>;
  */
