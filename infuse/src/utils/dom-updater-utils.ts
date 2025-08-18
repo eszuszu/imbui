@@ -1,8 +1,9 @@
 export interface DomUpdater {
   updateText: (key: string, value: string | undefined | null) => void;
   updateList: <T>(key: string, items: T[], labelText: string, renderItem: (item: T) => HTMLLIElement) => void;
-  updateSummary: (summaryText: string | undefined | null) => void;
-  updateHtml: (key: string, value: string | undefined | null) => void;
+  updateSummary: (details: string, summary: { key: string; text: string | undefined | null }, label: { key: string; text: string }) => void;
+  updateWithRenderer: (key: string, renderer: (target: HTMLElement) => void) => void;
+  updateHtmlUnsafe: (key: string, value: string | undefined | null) => void;
 };
 
 interface DomUpdaterContext {
@@ -57,18 +58,18 @@ export function createDomUpdater(context: DomUpdaterContext): DomUpdater {
       }
     }
   };
+  
+  const updateSummary = (details: string, summary: { key: string; text: string | undefined | null }, label: { key: string; text: string }) => {
 
-  const updateSummary = (summaryText: string | undefined | null) => {
-
-    const summaryDetails = getUpdatableElement<HTMLDetailsElement>('details');
-    const summaryParagraph = getUpdatableElement<HTMLElement>('summary');
-    const summaryLabel = getUpdatableElement<HTMLElement>('summary-label');
+    const summaryDetails = getUpdatableElement<HTMLDetailsElement>(details);
+    const summaryParagraph = getUpdatableElement<HTMLElement>(summary.key);
+    const summaryLabel = getUpdatableElement<HTMLElement>(label.key);
 
     if (summaryDetails && summaryParagraph && summaryLabel) {
-      if (summaryText) {
-        summaryParagraph.textContent = summaryText;
+      if (summary.text) {
+        summaryParagraph.textContent = summary.text;
         summaryDetails.style.display = '';
-        summaryLabel.textContent = 'Summary';
+        summaryLabel.textContent = label.text;
       } else {
         summaryParagraph.textContent = 'No summary available.';
         summaryDetails.style.display = 'none';
@@ -77,7 +78,15 @@ export function createDomUpdater(context: DomUpdaterContext): DomUpdater {
     }
   };
 
-  const updateHtml = (key: string, value: string | undefined | null) => {
+  const updateWithRenderer = (key: string, renderer: (target: HTMLElement) => void) => {
+    const el = getUpdatableElement(key);
+    if (el) {
+      renderer(el);
+    }
+  }
+
+  const updateHtmlUnsafe = (key: string, value: string | undefined | null) => {
+    
     const el = getUpdatableElement<HTMLElement>(key);
     if (el) {
       el.innerHTML = value ?? '';
@@ -88,6 +97,7 @@ export function createDomUpdater(context: DomUpdaterContext): DomUpdater {
     updateText,
     updateList,
     updateSummary,
-    updateHtml,
+    updateWithRenderer,
+    updateHtmlUnsafe,
   };
 }
