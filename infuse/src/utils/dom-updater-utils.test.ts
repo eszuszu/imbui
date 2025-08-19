@@ -94,18 +94,19 @@ describe('Dom Updater Utility unit tests', () => {
     });
 
     it('should render the correct number of items to the list', () => {
+      type testItem = string | HTMLDivElement;
       const item4 = document.createElement('div');
-      const newList = ['item1', 'item2', 'item3', item4];
+      const newList: testItem[] = ['item1', 'item2', 'item3', item4];
       component.domUpdater.updateList(
         'test-list',
         newList,
         'Updated List',
-        (newList) => {
+        (item: testItem) => {
           const li = document.createElement('li');
-          if (newList instanceof HTMLElement){
-            li.append(newList);
-          } else if (typeof newList === 'string'){
-            li.textContent = newList;
+          if (item instanceof HTMLElement){
+            li.append(item);
+          } else if (typeof item === 'string'){
+            li.textContent = item;
           }
           return li;
         }
@@ -115,15 +116,16 @@ describe('Dom Updater Utility unit tests', () => {
     });
 
     it('should gracefully handle null or undefined values in the items array', () => {
-      const newList = [undefined, null, null, 'item1'];
+      type testItem = undefined | null | string 
+      const newList: testItem[] = [undefined, null, null, 'item1'];
       component.domUpdater.updateList(
         'test-list',
         newList,
         'Updated List',
-        (newList) => {
+        (item: testItem) => {
           const li = document.createElement('li');
-          if (newList) {
-            li.append(newList);
+          if (item) {
+            li.append(item);
           }
           return li;
         }

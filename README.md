@@ -1,18 +1,24 @@
 # Imbui
-A lightweight Front-End toolkit for authoring HTML custom element web components with TypeScript. It provides a modular approach to building, with:
+**Imbui** is a modern forward looking front-end toolkit for building HTML custom elements with TypeScript. Unlike all-in-one frameworks, imbui provides a transparent, modular foundation that teaches you how the web works under the hood. It’s a workbench of composable utilities for atomic reactivity, declarative DOM updates, and service-based architecture, allowing you to build from the ground up or integrate with existing projects.
 
   - `imbui/core`: An opinionated core for a fast tracked workflow.
 
   - `imbui/infuse`: Tools to help you prototype your own custom components.
 
   - `imbui/pulse`: A lightweight package for atomic reactivity using signals and effects.
+  
+  > Think of `/core` as the workbench and `/infuse` as tools inside, `/pulse` contains the reactive primitives
+  > that power it all.
+
+### HTML Custom Elements
+This section will detail how `imbui` leverages the web native custom element suite of APIs, such as shadowRoot, adoptedStylesheets, and others, to create encapsulated, reusable components.
 
 ***
 
 **Table of Contents**
 - [Imbui](#imbui)
-  - [Imbui Core](#imbui-core)
     - [HTML Custom Elements](#html-custom-elements)
+  - [Imbui Core](#imbui-core)
     - [Baseline Standard APIs to Know](#baseline-standard-apis-to-know)
     - [Services](#services)
     - [Reactivity](#reactivity)
@@ -41,9 +47,6 @@ A lightweight Front-End toolkit for authoring HTML custom element web components
 
 ## Imbui Core
 The core package provides an opinionated base for rapid development. It focuses on streamlined component registration, lifecycle management, and built-in dependency injection. The detailed API reference is a work in progress and will be available shortly.
-
-### HTML Custom Elements
-This section will detail how `imbui` leverages the web native custom element suite of APIs, such as shadowRoot, adoptedStylesheets, and others, to create encapsulated, reusable components.
 
 ### Baseline Standard APIs to Know
 Coming Soon
