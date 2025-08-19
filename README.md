@@ -1,5 +1,7 @@
 # Imbui
-**Imbui** is a modern forward looking front-end toolkit for building HTML custom elements with TypeScript. Unlike all-in-one frameworks, imbui provides a transparent, modular foundation that teaches you how the web works under the hood. It’s a workbench of composable utilities for atomic reactivity, declarative DOM updates, and service-based architecture, allowing you to build from the ground up or integrate with existing projects.
+**This Documentation is a work in progress**
+
+**Imbui** is a modern and forward looking front-end toolkit for building HTML custom elements with TypeScript. Unlike all-in-one frameworks, imbui provides a transparent, modular foundation that helps teach you how the web works under the hood. It’s a workbench of composable utilities for atomic reactivity, declarative DOM updates, and service-based architecture, allowing you to build from the ground up or integrate with existing projects.
 
   - `imbui/core`: An opinionated core for a fast tracked workflow.
 
@@ -10,25 +12,14 @@
   > Think of `/core` as the workbench and `/infuse` as tools inside, `/pulse` contains the reactive primitives
   > that power it all.
 
-### HTML Custom Elements
-This section will detail how `imbui` leverages the web native custom element suite of APIs, such as shadowRoot, adoptedStylesheets, and others, to create encapsulated, reusable components.
-
 ***
 
 **Table of Contents**
 - [Imbui](#imbui)
-    - [HTML Custom Elements](#html-custom-elements)
-  - [Imbui Core](#imbui-core)
-    - [Baseline Standard APIs to Know](#baseline-standard-apis-to-know)
-    - [Services](#services)
-    - [Reactivity](#reactivity)
-    - [State](#state)
-    - [Routing](#routing)
-    - [All the Goodies of pulse and infuse plus:](#all-the-goodies-of-pulse-and-infuse-plus)
-  - [Imbui Infuse](#imbui-infuse)
-  - [Imbui Pulse](#imbui-pulse)
-    - [Signals](#signals)
-    - [Effects](#effects)
+  - [Quick Start](#quick-start)
+  - [HTML Custom Elements](#html-custom-elements)
+    - [Want to learn more about Custom Elements?](#want-to-learn-more-about-custom-elements)
+  - [Documentation](#documentation)
   - [Examples](#examples)
   - [Ways to Build / Workflows](#ways-to-build--workflows)
     - [SPA (Single-Page Application)](#spa-single-page-application)
@@ -38,88 +29,125 @@ This section will detail how `imbui` leverages the web native custom element sui
     - [Vite](#vite)
     - [TypeScript](#typescript)
   - [Inspirations / Alternatives](#inspirations--alternatives)
-  - [Contributions](#contributions)
-  - [](#)
+  - [Contributing](#contributing)
   - [Feature Requests](#feature-requests)
   - [License](#license)
 
 ***
+## Quick Start
 
-## Imbui Core
-The core package provides an opinionated base for rapid development. It focuses on streamlined component registration, lifecycle management, and built-in dependency injection. The detailed API reference is a work in progress and will be available shortly.
 
-### Baseline Standard APIs to Know
-Coming Soon
+The simplest thing you can do with `imbui` is to grab the `signal` and `effect` primitives from `imbui/pulse`
+```typescript
 
-### Services
-Details about `imbui`'s service-based architecture and its influence from the MVVM pattern.
+// Here's a toy example setting up a basic reactive pipeline
+// First, import these from 'imbui/pulse'
+import { signal, effect } from '@imbui/pulse';
 
-### Reactivity
-`imbui` uses a signal-based approach with `imbui/pulse` to ensure fine-grained, atomic updates to the DOM, minimizing re-renders and improving performance.
+// We'll going to create a 'signal' to hold our dynamic data.
+// A signal can be any value—a string, number object, etc.
+const myDynamicText = signal('My (maybe) first signal.');
 
-### State
-State vs Signals, differences with react. Notes about runtime vs. transpiletime vs. compiletime in the different ecosystems
-implementing services, registries as stores, caches, etc.
-SWR, fetching, data ingress
-History API, browser state which leads to...
+// Next, let's create a <p> element to display the text.
+const myParagraph = document.createElement('p');
 
-### Routing
-`imbui/core` includes a minimal routing setup to help you get started
-  - 'router-service'
-  - 'route-matcher'
-  - default config: see further examples*
+// Now, we'll create an effect to automatically update the paragraph's
+// textContent whenever myDynamicText's value changes.
+effect(() => {
+    
+  // We're 'getting' the signal's value here.
+  // This automatically sets up a dependency, so `effect` will
+  // rerun whenever `myDynamicText` is updated.
+  myParagraph.textContent = myDynamicText.get();
 
-### All the Goodies of pulse and infuse plus:
-  - Animation
-    - Web animations api integration with signals, services, streamlined setup
-  - Mixins
-    - `ContextProviderMixin`: custom event based context API solution to avoid 'prop drilling' in naive components, especially helpful as
-    a service provider, allows scoped services with heirarchichical lookup, integral to routing setups.
-    - `ImbuedWebComponentMixin` enables service injection, asychronous service subscriptions, and seamless data ingress from context providers
-  - And more including: Integration with a 'root' service registry and access, logger, registering stylesheets from strings, programatically, from style rules. Custom elements registering and initialization, and rapid setup powered by Vite. (link to Vite?)
+});
 
+
+
+// To see it in action, let's append the paragraph to the body.
+document.body.append(myParagraph);
+
+setTimeout(() => {
+  myDynamicText.set('The signal value has changed!');
+}, 2000); // The paragraph's text will update after 2 seconds.
+```
 ***
 
-## Imbui Infuse
-Details on the infuse package, which provides tools to help you prototype and build your own custom components.
-  - Anatomy of a TypeScript mixin
-    - BaseWebComponentMixin
-      - Shadow Dom
-      - slots?
-      - lifecycle methods
-    - ElementalWebComponentMixin
-      - opinionated way to query and cache element references
-      - other functionality 
-    - ReactiveWebComponentMixin
-      - easy integration with `imbui/pulse` signals and effects, enables @attributeSignal 
-  - Decorators? Quick guide — necessary ES versions, etc.
-  - Available
-    - @attribute
-    - @attributeSignal
-    - @signalProperty (legacy)
-    - @signalAccessor
-  - Anatomy of a decorator
-  - Utilities
-    - dom-updater-utils
-    - mixin-infusion-utils
+**`infuse`** offers some more fundamental pieces to get started building,
+here is how easy a web component with reactivity built-in is to get set up:
+
+```typescript
+
+// First, import the signal primitive and the ReactiveWebComponentMixin.
+import { signal, ReactiveWebComponentMixin } from '@imbui/infuse';
+
+// This is our reactive state. We will connect it to our component.
+const myDynamicText = signal('My other signal.');
+
+// We use the ReactiveWebComponentMixin to add reactive capabilities
+// to a standard HTMLElement.
+class MyComponent extends ReactiveWebComponentMixin(HTMLElement) {
+  constructor(){
+    super();
+  }
+  // The connectedCallback is the best place to create effects.
+  // The ReactiveWebComponentMixin automatically manages the effect's
+  // lifecycle, ensuring it is properly disposed when the component
+  // is removed from the DOM.
+  connectedCallback(){
+    // We create the effect here using the mxin's helper method.
+    // This call automatically registers the effect for cleanup.
+    this.createEffect(() => {
+      this.textContent = myDynamicText.get();
+    });
+  }
+}
+
+// Register our new component definition with the custom element registry
+window.customElements.define('my-component', MyComponent);
+
+// We'll create our new element with the native `createElement` API:
+const myComponent = document.createElement('my-component');
+document.body.append(myComponent);
+
+// The component's text is now the initial signal value.
+console.log(myComponent.textContent); // Outputs: "This is the initial text."
+
+// At this point, signal is the initial value, 'My other signal.'
+// If we change it, using `set()`:
+myDynamicText.set('New signal text value');
+// It's now updated. 
+// And now every time the signal is set, the component updates automatically.
+
+```
 ***
+## HTML Custom Elements
+New to custom elements and native web components?
+Check out MDN's Web Docs here:
+[Web Components](https://developer.mozilla.org/en-US/docs/Web/API/Web_components)
 
-## Imbui Pulse
-Details on the pulse package, a lightweight solution for atomic reactivity using signals and effects:
+### Want to learn more about Custom Elements?
 
-  - Why signals and effects rather than traditional pub/sub, eventing, or even observables?—The answer is that all approaches have their place depending on context and scope, as well as desired effects.
-  - Will elaborate: Signals vs Observables vs 'State' (react), Effects vs Events, More info about design patterns in `imbui/core`
+- **Curious about compatibility?** Here's a site that tests frameworks for their compatibility with native custom elements: [The Custom Elements Everywhere Project](https://custom-elements-everywhere.com/)
 
-### Signals
-Details on how to use signals atomically within web components or even Node.js applications.
-Signals vs. 'observables'?
+- 'web components' search on css-tricks.com: [CSS Tricks search="web components"](https://css-tricks.com/?s=web%20components)
+- **Feeling lazy?**
 
-### Effects
-An elaboration on the mechanics of effects and how to use them—
-Dependency tracking, automatic reactivity, `effect()`, vs. `computed()`, cleanup.
+  Copy and paste this prompt into your favorite LLM:
+
+    > "Explain the core concepts of HTML Custom Elements, including Shadow DOM, the template tag, and the element lifecycle callbacks. Use a simple analogy to make it easy to understand. 🧠"
+
+## Documentation
+
+- [**Imbui Core**](./core/README.md)
+- [**Imbui Infuse**](./infuse/README.md)
+- [**Imbui Pulse**](./pulse/README.md)
+
 ***
 
 ## Examples
+
+**WIP** at the moment this is more of a roadmap for the docs:
 - `imbui/pulse`
   - Basic form with client side validation.
   - Message popup on form submit.
@@ -138,7 +166,7 @@ Dependency tracking, automatic reactivity, `effect()`, vs. `computed()`, cleanup
   - Creating a router-link and a app-router component
   - Creating an animation controller enabled component
   - How to use the SWR fetcher utility
-***
+
 
 ## Ways to Build / Workflows
 
@@ -178,7 +206,7 @@ This section will elaborate on the design patterns and architectural inspiration
 
 ***
 
-## Contributions
+## Contributing
 Details on how to contribute to the project.
   - Setting up your dev environment
   - getting the repo
@@ -191,13 +219,11 @@ Details on how to contribute to the project.
     -  passionate,
     -  and compassionate
     - *I'd love to hear from you, please please please reach out :)* 
-##
 
 ## Feature Requests
 Details on how to get ahold of me (or future project collaborators/maintainers) to request additions or improvements
   - see contributions
   - contact?
-  - 
 ***
 
 ## License
