@@ -7,7 +7,9 @@ export default tseslint.config(
     ignores: [
       "eslint.config.js",
       "**/dist/**",
-      "**/demo/**"
+      "**/demo/**",
+      "**/node_modules/**",
+      "**/coverage/**"
     ],
   },
   eslint.configs.recommended,
@@ -21,8 +23,13 @@ export default tseslint.config(
       parserOptions: {
         ecmaVersion: 2022,
         sourceType: "module",
-        parser: tseslint.parser,
-        project: "./tsconfig.json",
+        parser: tseslint.parser, //This tells ESLint to use the TypeScript Language
+        // Service to resolve types, which correctly handles project references
+        // and individual tsconfig.json files for each package.
+        project: true,
+        project: true,
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
       },
     },
     rules: {

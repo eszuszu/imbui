@@ -1,6 +1,6 @@
 {
   // Inherits from imbui monorepo root tsconfig.json
-  "extends": "../tsconfig.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
