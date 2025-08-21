@@ -27,7 +27,6 @@ export default tseslint.config(
         // Service to resolve types, which correctly handles project references
         // and individual tsconfig.json files for each package.
         project: true,
-        project: true,
         projectService: true,
         tsconfigRootDir: import.meta.dirname,
       },
