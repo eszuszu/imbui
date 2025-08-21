@@ -1,0 +1,1 @@
+// Exploring paradigms, design patterns, and semantic primitives around app entry point.
