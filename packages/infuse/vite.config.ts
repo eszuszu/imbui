@@ -14,6 +14,11 @@ export default defineConfig({
       external: ['@imbui/pulse'],
     },
   },
+  resolve: {
+    alias: {
+      '@imbui/pulse': path.resolve(__dirname, '../pulse/src'),
+    }
+  },
   test: {
     environment: 'jsdom',
     coverage: {
@@ -22,11 +27,6 @@ export default defineConfig({
       reportsDirectory: './coverage',
       exclude: ['node_modules', 'dist', '**/demo/**']
     },
-  },
-  resolve: {
-    alias: {
-      '@imbui/pulse': path.resolve(__dirname, '../pulse/src/index.ts')
-    }
   },
   plugins: [
     dts({

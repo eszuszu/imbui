@@ -3,11 +3,6 @@
     "target": "ES2022",
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "types": [
-      "node",
-      "vite/client",
-      "vitest/globals"
-    ],
     "lib": [
       "ES2020",
       "DOM",
@@ -28,16 +23,15 @@
     "noUncheckedSideEffectImports": true,
     "sourceMap": true,
     "esModuleInterop": true,
-    "composite": true,
     "baseUrl": ".",
     "paths": {
-      "@imbui/*": ["./*/src"],
+      "@imbui/*": ["./packages/*/src"],
     }
   },
-  "include": [
-    "core/**/*.ts",
-    "pulse/**/*.ts",
-    "infuse/**/*.ts",
-  ],
-  "exclude": ["eslint.config.js", "node_modules"]
+  "exclude": ["eslint.config.js", "node_modules"],
+  "references": [
+    { "path": "packages/pulse" },
+    { "path": "packages/infuse" },
+    { "path": "packages/core" }
+  ]
 }

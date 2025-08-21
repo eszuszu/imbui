@@ -14,6 +14,12 @@ export default defineConfig({
       external: ['@imbui/pulse', '@imbui/infuse'],
     },
   },
+  resolve: {
+    alias: {
+      '@imbui/pulse': path.resolve(__dirname, '../pulse/src'),
+      '@imbui/infuse': path.resolve(__dirname, '../infuse/src'),
+    }
+  },
   test: {
     environment: 'jsdom',
     coverage: {
