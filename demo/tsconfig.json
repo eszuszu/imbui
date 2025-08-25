@@ -10,7 +10,8 @@
   },
   "include": [
     "vite.config.ts",
-    "main.ts"
+    "main.ts",
+    "prototypes/tagged-templates.ts"
   ],
   "exclude": [
     "node_modules",
@@ -19,6 +20,6 @@
   "references": [
     { "path": "../packages/core" },
     { "path": "../packages/infuse" },
-    { "path": "../packages/pulse"}
+    { "path": "../packages/pulse"},
   ]
 }
