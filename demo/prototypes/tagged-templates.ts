@@ -142,7 +142,7 @@ export const html = (
 };
 
 
-const compiledCache2 = new WeakMap<TemplateStringsArray, Compiled>();
+const compiledCache = new WeakMap<TemplateStringsArray, Compiled>();
 type InstanceMap = Map<TemplateStringsArray, TemplateData>;
 const instanceCache = new WeakMap<ParentNode, InstanceMap>();
 const activeIdentity = new WeakMap<ParentNode, TemplateStringsArray>();
@@ -216,7 +216,7 @@ function nodeFromPath(root: Node, path: NodePath): Node {
   return n;
 }
 function compile(tr: TemplateResult): Compiled {
-  const hit = compiledCache2.get(tr.identity);
+  const hit = compiledCache.get(tr.identity);
   if (hit) return hit;
 
   const template = document.createElement('template');
@@ -269,7 +269,7 @@ function compile(tr: TemplateResult): Compiled {
   });
 
   const compiled: Compiled = { template, blueprints };
-  compiledCache2.set(tr.identity, compiled);
+  compiledCache.set(tr.identity, compiled);
   return compiled;
 
 }
@@ -548,9 +548,9 @@ export function render(templateResult: TemplateResult, host: ParentNode, hostEl?
     instances.clear();
   }
   activeIdentity.set(host, identity);
-  let cached = instances.get(identity);
+  let instanceData = instances.get(identity);
 
-  if (!cached) {
+  if (!instanceData) {
 
     const fragment = compiled.template.content.cloneNode(true) as DocumentFragment;
     const parts = instantiateParts(fragment, compiled.blueprints);
@@ -619,15 +619,15 @@ export function render(templateResult: TemplateResult, host: ParentNode, hostEl?
       (host as Node).appendChild(fragment);
     }
 
-    cached = { template: compiled.template, parts, oldValues: [...values] };
-    instances.set(identity, cached);
+    instanceData = { template: compiled.template, parts, oldValues: [...values] };
+    instances.set(identity, instanceData);
     return;
   }
 
-  const parts = cached.parts;
+  const parts = instanceData.parts;
   for (const part of parts) {
     const newValue = values[part.index];
-    const oldValue = cached.oldValues[part.index];
+    const oldValue = instanceData.oldValues[part.index];
     if (!isDirective(newValue) && isDirective(oldValue)) {
       oldValue.cleanup?.(part, part.host);
       part.directiveInstance = undefined;
@@ -644,7 +644,7 @@ export function render(templateResult: TemplateResult, host: ParentNode, hostEl?
       part.valueNode.nodeValue = toText(newValue);
     } else if (part.type === 'attr') {
       const attrPart: AttrPart = part;
-      const changed = attrPart.valueIndices.some(i => values[i] !== cached.oldValues[i]);
+      const changed = attrPart.valueIndices.some(i => values[i] !== instanceData.oldValues[i]);
       if (!changed) continue;
 
       const node: Element = attrPart.node;
@@ -666,7 +666,7 @@ export function render(templateResult: TemplateResult, host: ParentNode, hostEl?
       renderRange(rangePart, newValue);
     }
   }
-  cached.oldValues = [...values];
+  instanceData.oldValues = [...values];
 }
 
 function renderRange(part: ChildRangePart, rawValue: any[]) {
