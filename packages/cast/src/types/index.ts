@@ -83,7 +83,7 @@ export interface EventPartBlueprint extends PartBlueprintBase {
   path: NodePath;
   name: string;
 }
-type PartBlueprint =
+export type PartBlueprint =
   | NodePartBlueprint
   | ChildRangePartBlueprint
   | AttrPartBlueprint
