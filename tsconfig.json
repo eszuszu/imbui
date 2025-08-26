@@ -30,6 +30,7 @@
   },
   "exclude": ["eslint.config.js", "node_modules"],
   "references": [
+    { "path": "packages/cast"},
     { "path": "packages/pulse" },
     { "path": "packages/infuse" },
     { "path": "packages/core" }

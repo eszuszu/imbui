@@ -10,15 +10,16 @@
   },
   "include": [
     "vite.config.ts",
-    "main.ts"
+    "main.ts",
+    "prototypes/tagged-templates.ts"
   ],
   "exclude": [
     "node_modules",
     "dist"
   ],
   "references": [
-    { "path": "../core" },
-    { "path": "../infuse" },
-    { "path": "../pulse"}
+    { "path": "../packages/core" },
+    { "path": "../packages/infuse" },
+    { "path": "../packages/pulse"},
   ]
 }
