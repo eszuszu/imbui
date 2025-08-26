@@ -9,8 +9,10 @@
 
   - `imbui/pulse`: A lightweight package for atomic reactivity using signals and effects.
   
-  > Think of `/core` as the workbench and `/infuse` as tools inside, `/pulse` contains the reactive primitives
-  > that power it all.
+  - `imbui/cast`: A mini dom rendering engine with support for tagged templates, directives, and keying.
+  
+  > Think of `/core` as the workbench, `/infuse` as the tools inside, `/cast` has the blueprints,
+  > and `/pulse` contains the reactive primitives that help power it all.
 
 ***
 
@@ -139,9 +141,10 @@ Check out MDN's Web Docs here:
 
 ## Documentation
 
-- [**Imbui Core**](./core/README.md)
-- [**Imbui Infuse**](./infuse/README.md)
-- [**Imbui Pulse**](./pulse/README.md)
+- [**Imbui Core**](./packages/core/README.md)
+- [**Imbui Infuse**](./packages/infuse/README.md)
+- [**Imbui Pulse**](./packages/pulse/README.md)
+- [**Imbui Cast**](./packages/cast/README.md) *experimental*
 
 ***
 
@@ -166,6 +169,8 @@ Check out MDN's Web Docs here:
   - Creating a router-link and a app-router component
   - Creating an animation controller enabled component
   - How to use the SWR fetcher utility
+- `imbui/cast`:
+  - *Coming Soon* 
 
 
 ## Ways to Build / Workflows
