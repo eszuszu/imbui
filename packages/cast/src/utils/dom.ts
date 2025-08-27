@@ -27,10 +27,13 @@ export function disposeBetween(start: Comment, end: Comment, parts?: Part[]) {
     }
   }
 
+
   let node: Node | null;
   while ((node = start.nextSibling)&& node !== end) {
 
     if (parts && parts.length) {
+
+
       for (const part of parts) {
         switch (part.type) {
           case 'node': {
@@ -64,8 +67,10 @@ export function disposeBetween(start: Comment, end: Comment, parts?: Part[]) {
           }
           case 'childRange': {
             if (
+
               node === part.startNode ||
               (node.nodeType === 1 && (node as Node).contains(part.startNode))
+
             ) {
               disposeBetween(part.startNode, part.endNode, parts);
               part.dispose?.();
@@ -76,8 +81,10 @@ export function disposeBetween(start: Comment, end: Comment, parts?: Part[]) {
       }
     }
 
+
     if (node.parentNode === parent) {
       parent.removeChild(node);
     }
+
   }
 }
