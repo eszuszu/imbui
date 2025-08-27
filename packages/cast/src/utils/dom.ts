@@ -27,11 +27,10 @@ export function disposeBetween(start: Comment, end: Comment, parts?: Part[]) {
     }
   }
 
-  let node = start.nextSibling;
-  while (node && node !== end) {
-    const next = node.nextSibling;
+  let node: Node | null;
+  while ((node = start.nextSibling)&& node !== end) {
 
-    if (parts) {
+    if (parts && parts.length) {
       for (const part of parts) {
         switch (part.type) {
           case 'node': {
@@ -65,8 +64,8 @@ export function disposeBetween(start: Comment, end: Comment, parts?: Part[]) {
           }
           case 'childRange': {
             if (
-              node === part.startNode || node === part.endNode ||
-              (node.nodeType === 1 && ((node as Node).contains(part.startNode) || (node as Node).contains(part.endNode)))
+              node === part.startNode ||
+              (node.nodeType === 1 && (node as Node).contains(part.startNode))
             ) {
               disposeBetween(part.startNode, part.endNode, parts);
               part.dispose?.();
@@ -76,7 +75,9 @@ export function disposeBetween(start: Comment, end: Comment, parts?: Part[]) {
         }
       }
     }
-    parent.removeChild(node);
-    node = next;
+
+    if (node.parentNode === parent) {
+      parent.removeChild(node);
+    }
   }
 }
