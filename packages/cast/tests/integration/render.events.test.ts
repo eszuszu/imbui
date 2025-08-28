@@ -1,29 +1,30 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { die, cast, unmount } from "../../src/";
-import { instanceCache } from "../../src/render/instanceCache"; //`die` is an alias for the `html` tagged templatee
+import { die, cast } from "../../src/";
+import { defaultRuntime } from "../../src/runtime/runtime";
+//import { instanceCache } from "../../src/render/instanceCache"; //`die` is an alias for the `html` tagged templatee
 // `cast` is an alias for `render`
 
 
 describe('Event listener functionality', () => {
-  
+  const runtime = defaultRuntime;
   const p = document.createElement('div');
   const handlerSpy = vi.fn();
   const newSpy = vi.fn();
   cast(die`<button onclick=${handlerSpy}></button>`, p);
   let element = p.firstElementChild as HTMLButtonElement;
-  beforeEach(()=> {
-  
+  beforeEach(() => {
+
     vi.restoreAllMocks();
 
   });
 
   it('attaches events', () => {
-    
-    
+
+
     expect(handlerSpy).not.toHaveBeenCalled();
     element.click();
     expect(handlerSpy).toHaveBeenCalled();
-    
+
   });
 
   it('should correctly swap the handler when updated', () => {
@@ -43,7 +44,7 @@ describe('Event listener functionality', () => {
   it('should have unmount remove listeners', () => {
     element.click()
     expect(newSpy).toHaveBeenCalledTimes(1);
-    unmount(p);
+    runtime.unmount(p);
     expect(newSpy).toHaveBeenCalledTimes(1);
 
   });
@@ -54,17 +55,17 @@ describe('Event listener functionality', () => {
 
     const removeSpy = vi.spyOn(EventTarget.prototype, "removeEventListener");
 
-    unmount(p);
+    runtime.unmount(p);
     expect(removeSpy).toHaveBeenCalledWith("click", expect.any(Function));
 
     removeSpy.mockRestore();
   })
 
   it("clears event parts from cache on unmount", () => {
-    unmount(p);
-    const hostCache = instanceCache.get(p);
-    
-    const imap = instanceCache.get(element);
+    runtime.unmount(p);
+    const hostCache = runtime.instanceCache.get(p);
+
+    const imap = runtime.instanceCache.get(element);
     expect(imap).toBeUndefined();
     expect(hostCache?.size).toBe(0);
   });
