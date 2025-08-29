@@ -29,7 +29,9 @@ export function disposeBetween(start: Comment, end: Comment, parts?: Part[]) {
 
 
   let node: Node | null;
+
   while ((node = start.nextSibling) && node !== end) {
+
 
     if (parts && parts.length) {
 
