@@ -1,3 +1,5 @@
+import { Runtime } from "../runtime/runtime";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface TemplateResult {
   identity: TemplateStringsArray;
@@ -22,6 +24,7 @@ export interface BasePart {
   type: PartType;
   index: number;
   host?: HTMLElement;
+  runtime?: Runtime;
   directiveInstance?: DirectiveResult;
   dispose?: (() => void) | null;
 }

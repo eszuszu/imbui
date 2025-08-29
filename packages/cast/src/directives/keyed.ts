@@ -31,6 +31,8 @@ export const keyed = <T>(
       parent.insertBefore(s, pointer);
       parent.insertBefore(e, pointer);
       rec = { key: k, start: s, end: e };
+      setSpanContent(rec, mapFn(item), part.host, part);
+      next.set(k, rec);
     } else {
       let n: Node | null = rec.start;
 
@@ -41,10 +43,10 @@ export const keyed = <T>(
         n = nextN!;
       }
       state.delete(k);
+      next.set(k, rec);
     }
 
-    setSpanContent(rec, mapFn(item), part.host, part);
-    next.set(k, rec);
+
   }
 
   for (const rec of state.values()) {

@@ -1,6 +1,6 @@
 import type { TemplateData } from "../types";
 import { disposeBetween } from "../utils/dom";
-import { instanceCache, activeIdentity } from "./instanceCache";
+import { instanceCache, activeIdentity } from "../render/instanceCache";
 
 export function disposeTemplateData(td: TemplateData) {
   for (const part of td.parts) {

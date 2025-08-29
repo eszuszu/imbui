@@ -4,7 +4,7 @@ import type {
   PartBlueprint,
   ChildRangePart
 } from "../types";
-import { compiledCache } from "./compiledCache";
+import { Runtime } from "../runtime/runtime";
 import { looksLikeAttrOpen, looksLikeChildSlot } from "../utils/parsing";
 import { indexPathTo } from "../utils/dom";
 import { collectParts } from "../parts/collectParts";
@@ -15,8 +15,10 @@ import {
   __TAIL_STAMP__
 } from "../stamps";
 
-export function compile(tr: TemplateResult): Compiled {
+export function compile(tr: TemplateResult, runtime: Runtime): Compiled {
+  const compiledCache = runtime.compiledCache;
   const hit = compiledCache.get(tr.identity);
+
   if (hit) return hit;
 
   const template = document.createElement('template');

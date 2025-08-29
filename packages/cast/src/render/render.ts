@@ -8,18 +8,14 @@ import type {
 import { toText } from "../utils/text";
 import { disposeBetween } from "../utils/dom";
 import { isDirective, runDirective } from "../directives/base";
-import {
-  moveInstances,
-  getInstances,
-  activeIdentity
-} from "./instanceCache";
 import { compile } from "../compilation/compile";
 import { instantiateParts } from "../parts/instantiateParts";
 import { renderRange } from "./renderRange";
-import { disposeTemplateData } from "./unmount";
+import { Runtime, defaultRuntime } from "../runtime/runtime";
 
 //eslint-disable-next-line @typescript-eslint/no-explicit-any
-function insertValueBefore(end: Comment, value: any, host?: HTMLElement) {
+function insertValueBefore(end: Comment, value: any, runtime: Runtime, host?: HTMLElement) {
+
   const parent = end.parentNode!;
   if (isDirective(value)) {
     runDirective(
@@ -36,7 +32,7 @@ function insertValueBefore(end: Comment, value: any, host?: HTMLElement) {
   if (value && (value as TemplateResult).identity) {
     const fragment = document.createDocumentFragment();
     render(value, fragment, host);
-    moveInstances(fragment, parent);
+    runtime.moveInstances(fragment, parent); // prototyping runtime service class
     while (fragment.firstChild) parent.insertBefore(fragment.firstChild, end);
     return;
   }
@@ -44,26 +40,29 @@ function insertValueBefore(end: Comment, value: any, host?: HTMLElement) {
 }
 //eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function setSpanContent(span: { start: Comment, end: Comment }, value: any, host?: HTMLElement, owningPart?: ChildRangePart) {
+  const runtime = owningPart?.runtime ?? defaultRuntime;
   disposeBetween(span.start, span.end, owningPart?.allParts);
-  insertValueBefore(span.end, value, host);
+  insertValueBefore(span.end, value, runtime, host);
 }
 
-export function render(templateResult: TemplateResult, host: ParentNode, hostEl?: HTMLElement) {
+
+export function render(templateResult: TemplateResult, host: ParentNode, hostEl?: HTMLElement, runtime: Runtime = defaultRuntime) {
+
   const { identity, values } = templateResult;
 
-  const compiled = compile(templateResult);
+  const compiled = compile(templateResult, runtime);
 
-  const instances = getInstances(host);
-  const prevActive = activeIdentity.get(host);
+  const instances = runtime.getInstances(host);
+  const prevActive = runtime.getActiveIdentity(host);
 
   if (prevActive && prevActive !== identity) {
     for (const [, td] of instances) {
 
-      disposeTemplateData(td);
+      runtime.disposeTemplateData(td);
     }
     instances.clear();
   }
-  activeIdentity.set(host, identity);
+  runtime.setActiveIdentity(host, identity);
   let instanceData = instances.get(identity);
 
   if (!instanceData) {
@@ -74,6 +73,7 @@ export function render(templateResult: TemplateResult, host: ParentNode, hostEl?
       part.host = hostEl || (host instanceof HTMLElement ? host : undefined);
       //eslint-disable-next-line @typescript-eslint/no-explicit-any
       (part as any).allParts = parts;
+      part.runtime = runtime;
     })
 
     for (const part of parts) {
