@@ -4,7 +4,6 @@ import type {
   PartBlueprint,
   ChildRangePart
 } from "../types";
-//import { compiledCache } from "./compiledCache";
 import { Runtime } from "../runtime/runtime";
 import { looksLikeAttrOpen, looksLikeChildSlot } from "../utils/parsing";
 import { indexPathTo } from "../utils/dom";

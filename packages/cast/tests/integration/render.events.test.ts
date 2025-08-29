@@ -1,16 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { die, cast } from "../../src/";
-import { defaultRuntime } from "../../src/runtime/runtime";
+import { Runtime } from "../../src/runtime/runtime";
 //import { instanceCache } from "../../src/render/instanceCache"; //`die` is an alias for the `html` tagged templatee
 // `cast` is an alias for `render`
 
 
 describe('Event listener functionality', () => {
-  const runtime = defaultRuntime;
+
+  const runtime = new Runtime();
   const p = document.createElement('div');
   const handlerSpy = vi.fn();
   const newSpy = vi.fn();
-  cast(die`<button onclick=${handlerSpy}></button>`, p);
+  cast(die`<button onclick=${handlerSpy}></button>`, p, undefined, runtime);
   let element = p.firstElementChild as HTMLButtonElement;
   beforeEach(() => {
 
@@ -32,7 +33,7 @@ describe('Event listener functionality', () => {
     element.click();
     expect(handlerSpy).toHaveBeenCalledTimes(1);
     expect(newSpy).not.toHaveBeenCalled();
-    cast(die`<button onclick=${newSpy}></button>`, p);
+    cast(die`<button onclick=${newSpy}></button>`, p, p, runtime);
     element = p.firstElementChild as HTMLButtonElement;
     element.click();
     expect(handlerSpy).toHaveBeenCalledTimes(1);
@@ -50,7 +51,7 @@ describe('Event listener functionality', () => {
   });
 
   it("should call removeEventListener on unmount", () => {
-    cast(die`<button onclick=${handlerSpy}></button>`, p);
+    cast(die`<button onclick=${handlerSpy}></button>`, p, p, runtime);
     element = p.firstElementChild as HTMLButtonElement;
 
     const removeSpy = vi.spyOn(EventTarget.prototype, "removeEventListener");

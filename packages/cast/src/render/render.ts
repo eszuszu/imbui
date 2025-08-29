@@ -45,6 +45,7 @@ export function setSpanContent(span: { start: Comment, end: Comment }, value: an
   insertValueBefore(span.end, value, runtime, host);
 }
 
+
 export function render(templateResult: TemplateResult, host: ParentNode, hostEl?: HTMLElement, runtime: Runtime = defaultRuntime) {
 
   const { identity, values } = templateResult;
@@ -52,7 +53,7 @@ export function render(templateResult: TemplateResult, host: ParentNode, hostEl?
   const compiled = compile(templateResult, runtime);
 
   const instances = runtime.getInstances(host);
-  const prevActive = runtime.activeIdentity.get(host);
+  const prevActive = runtime.getActiveIdentity(host);
 
   if (prevActive && prevActive !== identity) {
     for (const [, td] of instances) {
@@ -61,7 +62,7 @@ export function render(templateResult: TemplateResult, host: ParentNode, hostEl?
     }
     instances.clear();
   }
-  runtime.activeIdentity.set(host, identity);
+  runtime.setActiveIdentity(host, identity);
   let instanceData = instances.get(identity);
 
   if (!instanceData) {

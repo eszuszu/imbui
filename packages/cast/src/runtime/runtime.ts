@@ -7,7 +7,16 @@ export class Runtime {
 
   compiledCache = new WeakMap<TemplateStringsArray, Compiled>();
   instanceCache = new WeakMap<ParentNode, InstanceMap>();
-  activeIdentity = new WeakMap<ParentNode, TemplateStringsArray>();
+  #activeIdentity = new WeakMap<ParentNode, TemplateStringsArray>();
+
+  getActiveIdentity(host: ParentNode)  {
+    return this.#activeIdentity.get(host);
+  }
+
+  setActiveIdentity(host: ParentNode, tpl: TemplateStringsArray) {  
+    this.#activeIdentity.set(host, tpl);
+  }
+
 
   getInstances(container: ParentNode): InstanceMap {
     let map = this.instanceCache.get(container);
@@ -26,10 +35,10 @@ export class Runtime {
       target.set(identity, td);
     }
     this.instanceCache.delete(from);
-    const active = this.activeIdentity.get(from);
+    const active = this.#activeIdentity.get(from);
     if (active) {
-      this.activeIdentity.set(to, active);
-      this.activeIdentity.delete(from);
+      this.#activeIdentity.set(to, active);
+      this.#activeIdentity.delete(from);
     }
   }
 
@@ -64,7 +73,7 @@ export class Runtime {
     map.clear();
     //eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((host as any).replaceChildren) (host as ParentNode).replaceChildren();
-    this.activeIdentity.delete(host);
+    this.#activeIdentity.delete(host);
   }
 }
 
