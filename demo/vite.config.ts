@@ -9,6 +9,7 @@ export default defineConfig({
       '@imbui/core': resolve(__dirname, '../packages/core/src'),
       '@imbui/infuse': resolve(__dirname, '../packages/infuse/src'),
       '@imbui/pulse': resolve(__dirname, '../packages/pulse/src'),
+      '@imbui/cast': resolve(__dirname, '../packages/cast/src'),
     },
   },
 });

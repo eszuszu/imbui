@@ -1,4 +1,6 @@
 # Imbui
+
+[![Build Status](https://github.com/eszuszu/imbui/actions/workflows/ci.yml/badge.svg)](https://github.com/eszuszu/imbui/actions/workflows/ci.yml)
 **This Documentation is a work in progress**
 
 **Imbui** is a modern and forward looking front-end toolkit for building HTML custom elements with TypeScript. Unlike all-in-one frameworks, imbui provides a transparent, modular foundation that helps teach you how the web works under the hood. It’s a workbench of composable utilities for atomic reactivity, declarative DOM updates, and service-based architecture, allowing you to build from the ground up or integrate with existing projects.

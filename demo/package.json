@@ -11,7 +11,8 @@
   "dependencies": {
     "@imbui/core": "workspace:*",
     "@imbuil/infuse": "workspace:*",
-    "@imbui/pulse": "workspace:*"
+    "@imbui/pulse": "workspace:*",
+    "@imbui/cast": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.8.3",
