@@ -2,8 +2,7 @@
 
 [![Build Status](https://github.com/eszuszu/imbui/actions/workflows/ci.yml/badge.svg)](https://github.com/eszuszu/imbui/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/eszuszu/imbui/graph/badge.svg?token=KTSJYZEOF4)](https://codecov.io/gh/eszuszu/imbui)
-
-**This Documentation is a work in progress**
+***
 
 **Imbui** is a modern and forward looking front-end toolkit for building HTML custom elements with TypeScript. Unlike all-in-one frameworks, imbui provides a transparent, modular foundation that helps teach you how the web works under the hood. It’s a workbench of composable utilities for atomic reactivity, declarative DOM updates, and service-based architecture, allowing you to build from the ground up or integrate with existing projects.
 
@@ -41,8 +40,13 @@
 
 ***
 ## Quick Start
+If you want, you can explore the repo in web container:
 
+[![Try it on StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/eszuszu/imbui)
 
+  - Navigate to 'demo/' with `cd demo`
+  - run `pnpm vite`, the dev server will open index.html in demo.
+---
 The simplest thing you can do with `imbui` is to grab the `signal` and `effect` primitives from `imbui/pulse`
 ```typescript
 
@@ -126,6 +130,7 @@ myDynamicText.set('New signal text value');
 // And now every time the signal is set, the component updates automatically.
 
 ```
+
 ***
 ## HTML Custom Elements
 New to custom elements and native web components?
@@ -148,7 +153,7 @@ Check out MDN's Web Docs here:
 - [**Imbui Core**](./packages/core/README.md)
 - [**Imbui Infuse**](./packages/infuse/README.md)
 - [**Imbui Pulse**](./packages/pulse/README.md)
-- [**Imbui Cast**](./packages/cast/README.md) *experimental*
+- [**Imbui Cast**](./packages/cast/README.md)
 
 ***
 
