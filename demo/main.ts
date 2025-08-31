@@ -54,16 +54,15 @@ export const init = customElements.define(
       this.dynamicClass = 'test';
 
     }
-    
+    // base mixin always attaches to a shadow dom,
+    // so we need to make a slot element if we want the original
+    // pre-rendered light dom to render into the shadow dom.
     connectedCallback(): void {
       super.connectedCallback?.();
       const container = document.createElement('div');
-      container.setAttribute('name', 'slotted');
       const projected = document.createElement('slot');
-      projected.setAttribute('slot', 'slotted');
       this.shadowRoot.appendChild(projected);
       this.shadowRoot.appendChild(container);
-
       this.createEffect(() => {
 
         render(
