@@ -11,13 +11,14 @@ export default defineConfig({
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
-      external: ['@imbui/pulse', '@imbui/infuse'],
+      external: ['@imbui/pulse', '@imbui/infuse', '@imbui/cast'],
     },
   },
   resolve: {
     alias: {
       '@imbui/pulse': path.resolve(__dirname, '../pulse/src'),
       '@imbui/infuse': path.resolve(__dirname, '../infuse/src'),
+      '@imbui/cast': path.resolve(__dirname, '../cast/src'),
     }
   },
   test: {

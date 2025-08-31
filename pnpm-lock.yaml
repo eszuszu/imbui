@@ -59,6 +59,9 @@ importers:
 
   packages/core:
     dependencies:
+      '@imbui/cast':
+        specifier: workspace:*
+        version: link:../cast
       '@imbui/infuse':
         specifier: workspace:*
         version: link:../infuse

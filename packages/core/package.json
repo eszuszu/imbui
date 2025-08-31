@@ -26,7 +26,8 @@
   },
   "dependencies": {
     "@imbui/infuse": "workspace:*",
-    "@imbui/pulse": "workspace:*"
+    "@imbui/pulse": "workspace:*",
+    "@imbui/cast": "workspace:*"
   },
   "keywords": [],
   "author": "Elizabeth Schwartz",
