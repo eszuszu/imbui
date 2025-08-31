@@ -1,6 +1,7 @@
-import { html, renderText, addEffect } from "./prototypes/tagged-templates";
+import { html, Runtime, render, TemplateResult } from "@imbui/cast";
 import {
   BaseWebComponentMixin,
+  ReactiveWebComponentMixin,
   infuse,
   Signal,
   signal,
@@ -10,45 +11,94 @@ import {
 const appInfusion = infuse(
   HTMLElement,
   BaseWebComponentMixin,
+  ReactiveWebComponentMixin,
 );
+
+const sheet = `h1 {
+        max-width: 100dw;
+        background-color: black;
+        color: white;
+        display: block;
+        min-height: 15rem;
+      }`
+
+const appTemplate = (
+  title: string | number,
+  count: number,
+  dynamicClass: string,
+  handler: () => void
+) => html`
+      <h1>${title}</h1>
+      <p class="${dynamicClass}">Count: ${count}</p>
+      <button onclick="${handler}">Click Me!</button>
+      `;
 
 export const init = customElements.define(
   'app-',
   class App extends appInfusion {
     globalSignal!: Signal<number>;
-    titleSignal!: Signal<string>;
+    titleSignal!: Signal<string | number>;
+    dynamicTitle!: string;
+    runtime!: Runtime;
+    sheet!: CSSStyleSheet;
+    template!: () => TemplateResult;
+    dynamicClass: string;
     constructor() {
       super();
-      this.globalSignal = signal(0);
+      this.globalSignal = signal<number>(0);
+      this.titleSignal = signal<string | number>('hello :) Why dont you click :D \n');
+      this.runtime = new Runtime();
+      this.sheet = new CSSStyleSheet();
+      this.sheet.replaceSync(sheet);
+      this.adoptedStyleSheets = [this.sheet];
+      this.dynamicClass = 'test';
+
     }
-  
+    
     connectedCallback(): void {
       super.connectedCallback?.();
       const container = document.createElement('div');
+      container.setAttribute('name', 'slotted');
+      const projected = document.createElement('slot');
+      projected.setAttribute('slot', 'slotted');
+      this.shadowRoot.appendChild(projected);
+      this.shadowRoot.appendChild(container);
 
-      const slot: HTMLSlotElement = document.createElement('slot');
-      this.shadowRoot.appendChild(slot);
-      this.appendChild(container);
+      this.createEffect(() => {
 
-      let dynamicTitle = 'hello';
-      this.titleSignal = signal(dynamicTitle);
-
-      let test = "test";
-      const doc = html`
-      <h1>${addEffect(this.titleSignal)}</h1>
-      <p class="${test}">Count: ${addEffect(this.globalSignal)}</p>
-      `;
-
-      renderText(doc, container);
-
-      dynamicTitle = 'Updated!';
+        render(
+          appTemplate(
+            this.titleSignal.get(),
+            this.globalSignal.get(),
+            this.dynamicClass,
+            this.handler
+          ), container, undefined, this.runtime);
+    
+      });
 
       for(let i = 0; i< 10; i++){
 
         setTimeout(() => {
-          this.globalSignal.set(this.globalSignal.get() + 1);
-          this.titleSignal.set(this.titleSignal.get() + dynamicTitle)
+          this.globalSignal.set(<number>this.globalSignal.get() + 1);
+          
+          const count = this.globalSignal.get();
+          if (count > 15) {
+            this.titleSignal.set(this.titleSignal.get() + ' ouch');
+          } else {
+            this.titleSignal.set(this.titleSignal.get() + 'Updated ' + count)
+          }
         }, 2000 + (i*100));
+      }
+    }
+
+    handler = () => {
+      this.globalSignal.set(<number>this.globalSignal.get() + 1);
+      const count = this.globalSignal.get();
+      if (count > 15) {
+        this.titleSignal.set(this.titleSignal.get() + ' ouch');
+      } else {
+        this.titleSignal.set(this.titleSignal.get() + 'Updated ' + count);
+
       }
     }
   
