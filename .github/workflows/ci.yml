@@ -31,7 +31,7 @@ jobs:
       - name: Run lint checks
         run: pnpm lint
       - name: Run tests and collect coverage
-        run: pnpm -r test test:coverage
+        run: pnpm test:coverage
 
       - name: Build packages
         run: pnpm -r build
