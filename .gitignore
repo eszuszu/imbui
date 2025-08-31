@@ -46,7 +46,7 @@ pnpm-debug.log*
 # Test Coverage
 # -----------------------------------------------------------
 # Ignore test coverage reports
-/coverage
+**/coverage/
 
 # -----------------------------------------------------------
 # Environment Variables

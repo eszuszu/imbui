@@ -9,7 +9,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "prepare": "husky",
     "test": "pnpm -r test",
-    "test:coverage": "pnpm -r test --coverage"
+    "test:coverage": "pnpm -r test:coverage"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": "eslint --fix"

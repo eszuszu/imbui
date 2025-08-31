@@ -31,7 +31,13 @@ jobs:
       - name: Run lint checks
         run: pnpm lint
       - name: Run tests and collect coverage
-        run: pnpm -r test -- --coverage
+        run: pnpm test:coverage
 
       - name: Build packages
         run: pnpm -r build
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage/lcov.info
