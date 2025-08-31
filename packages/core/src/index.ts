@@ -9,3 +9,4 @@ export * from "./utils";
 
 export * from '@imbui/pulse';
 export * from '@imbui/infuse';
+export * from '@imbui/cast';

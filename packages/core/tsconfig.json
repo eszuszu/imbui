@@ -22,7 +22,7 @@
       "path": "../infuse"
     },
     {
-      "cast": "../cast"
-    }
+      "path": "../cast"
+    },
   ]
 }
