@@ -4,32 +4,77 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Elizabeth Schwartz - Imbui" />
-    <title>Imbui Demo</title>
-    <link rel="stylesheet" href="root-styles.css" />
+    <title>imbui Demo</title>
+    <link rel="stylesheet" href="styles.css" />
     <link rel="icon" href="favicon.ico" />
   </head>
   <body>
+    <demo-header>
+      <header slot="header-slot"></header>
+    </demo-header>
     <app- id="app">
-      <div>
-      <h1>Imbui Demo</h1>
-      <p>Here are some examples of Imbui components.</p>
-      <section>
+      <hgroup slot="intro-slot">
+      <h1>imbui Demo</h1>
+      <p>Here's a an example of an imbui component.</p>
+      </hgroup>
+      <section slot="basics-slot">
         <h2>Basics</h2>
-        
+        <p>This page is pre-rendered content in HTML. I've set up an app that slots this html into it's shadow root.</p>
       </section>
-      <section>
+      <section slot="pre-slot">
         <h2>Pre-reqs / More info:</h2>
-
+        <p data-projected="pre">The <b>shadow DOM</b> let&apos;s us do a bunch of cool stuff.</p>
+        <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM" target="blank">^Using the Shadow Dom</a> on MDN.
+        <p>It let's us create isolation contexts for styling,
+        and it gives us a more declarative semantic for authoring and anchoring custom web components within the native web.</p>
+        💡There is also the declarative shadow dom syntax <code>shadowrootmode="open"</code> available in some browsers.
+        <aside>
+        <p>Actually, under the hood, imbui uses the same mechanism, an html &lt;template&gt; element that's used to compile a document fragment.
+        </p>
+        </aside>
+        <hr>
+        <h3>In no particular order, here are some more resources on custom elements and web components.</h3>
+        <ul>
+          <span class="label"><b>Resources:</b></span>
+          
+          <li>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components" target="blank"><b>^Web Components:</b></a> Article from MDN
+            <p>Tons of resources on concepts, some light guides, and links to the more dense spec</p>
+            <aside><b>Tip:</b>When starting out building components, especially if trying to mount/hydrate pre-rendered HTML, don't make it too complicated ( <sub>i'm so guilty of this...</sub> ), just start small, stick to a shallow shadow dom tree, don't go for nested stuff right away.</aside>
+            <br>
+          </li>
+          <li>
+            <a href="https://html.spec.whatwg.org/dev/custom-elements.html" target="blank"><b>^Custom Elements</b></a> HTML: The Living Standard
+            <p>Denser but you can't beat the standard.</p><br>
+          </li>
+        </ul>
       </section>
-      <section>
-        <h2>Reactivity</h2>
-
+      <section slot="reactive-slot">
+        <h2 >Reactivity</h2>
+        <p slot="reactive">If we want, we can take pre-rendered content, and cast a shadow,
+        and the content that was there will only stay if we slot it.</p>
+        <p>Signals allow you to store atomic pieces of state with automaticaly tracked dependencies.</p>
       </section>
-      <section>
+      <section slot="state-slot">
         <h2>'State', 'Services'</h2>
-
+        <div data-projected="hook">You can make a pre-rendered container to hook into:</div>
+        <div data-projected="counter">
+          <h1 class="skeleton">For Example, this could be a skeleton spinner while something is compiling or loading...</h1>
+          <p>Count: 0</p>
+          <div><button>Loading...</button></div>
+        </div>
       </section>
-      </div>
+      <section slot="content-slot">
+        <p>
+        If you view the page source or inspect the index.html, you'll see default content.
+        We can take advantage of the fallback nature of custom elements to render skeletons. Just make sure your html and css has parity between intitial content and anything in a components shadow DOM. This is one of those nuances where you might need to balance the tradeoff between overlapping responsibilities, create the stable layout in your pre-rendered content, the responsibility for design tokens and CSS should be with the initial site or app payload. Any lazy loaded or async content should wait until it's host container is stable before being connected to the live DOM.
+        </p>
+      </section>
+      <demo-footer>
+        <footer slot="footer-slot">
+
+        </footer>
+      </demo-footer>
     </app->
     <script type="module" src="./main.ts"></script>
   </body>

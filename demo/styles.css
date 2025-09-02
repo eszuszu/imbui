@@ -1,0 +1,121 @@
+:root {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+h1, [data-projected="counter"] {
+  max-width: 100dvw;
+  background-image: linear-gradient(rgb(55, 37, 84), rgb(5, 3, 17));
+  color: white;
+  display: block;
+  min-height: 15rem;
+
+}
+
+[data-projected="counter"] {
+  border-radius: 8px;
+  & h1 {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+}
+@keyframes text-dimming {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+[data-projected="counter"] .skeleton {
+  animation-name: text-dimming;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+.ouch {
+  color: white;
+  animation-name: text-hurting;
+  animation-duration: 3s;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+@keyframes text-hurting {
+  0% {
+    color: white;
+  }
+  50% {
+    color: darkred;
+  }
+  100% {
+    color: black;
+  }
+}
+
+/* The cool thing about attribute selectors in CSS is you can just do this if you want things in a slot */
+
+[slot="intro-slot"] {
+  & h1 {
+    color: #9eedcf;
+    text-align: center;
+    font-size: 3rem;
+    margin: 0;
+    padding-top: 2rem;
+  }
+  & p {
+    padding-top: 2rem;
+    font-size: 1.2rem;
+    max-width: 768px;
+    margin: 0 auto;
+  }
+}
+[slot="pre-slot"],
+[slot="basics-slot"],
+[slot="reactive-slot"],
+[slot="state-slot"],
+[slot="content-slot"] {
+  margin: 8px;
+  max-width: 768px;
+  margin: 0 auto;
+
+  & p {
+    margin-left: 1rem;
+  }
+  & aside {
+    margin-left: 1rem;
+    border-left: 4px solid rgb(91, 101, 99);
+    padding-left: 8px;
+  }
+  & a {
+    margin-left: 1rem;
+    background-color:rgb(210, 248, 235);
+
+  }
+}
+[data-projected="hook"] {
+  font-size: 1.2rem;
+
+}
+[data-projected="counter"] {
+  border-radius: 8px;
+  & div {
+    display: flex;
+    justify-content: center;
+  }
+
+  & button {
+    padding: 1.6rem;
+    margin: 1.2rem;
+    font-size: 1.2rem;
+    min-width: 10rem;
+  }
+
+}
