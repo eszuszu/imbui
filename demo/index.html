@@ -67,7 +67,7 @@
       <section slot="content-slot">
         <p>
         If you view the page source or inspect the index.html, you'll see default content.
-        We can take advantage of the fallback nature of custom elements to render skeletons. Just make sure your html and css has parity between intitial content and anything in a components shadow DOM. This is one of those nuances where you might need to balance the tradeoff between overlapping responsibilities, create the stable layout in your pre-rendered content, the responsibility for design tokens and CSS should be with the initial site or app payload. Any lazy loaded or async content should wait until it's host container is stable before being connected to the live DOM.
+        We can take advantage of the fallback nature of custom elements to render skeletons. Just make sure your html and css has parity between intitial content and anything in a components shadow DOM. This is one of those nuances where you might need to balance the tradeoff between overlapping responsibilities. Create the stable layout in your pre-rendered content, the responsibility for design tokens and CSS should be with the initial site or app payload. Any lazy loaded or async content should wait until it's host container is stable before being connected to the live DOM to avoid content flashes or layout shifts.
         </p>
       </section>
       <demo-footer>

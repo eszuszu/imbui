@@ -1,6 +1,6 @@
 import { ServiceScope } from "../root/service-scope";
 import { LoggerService } from "../services/logger-service";
-import { CustomElementRegistryService } from "../services/custom-element-registry-service";
+import { CustomElementRegistryService } from "../services/element-registry-service";
 import { LoggerServiceKey, CustomElementRegistryServiceKey } from "../identifiers/service-keys";
 import { ContextRequestEvent } from "../events/context-request-event";
 import { SERVICE_SCOPE_CONTEXT_KEY } from "../identifiers/context-keys";

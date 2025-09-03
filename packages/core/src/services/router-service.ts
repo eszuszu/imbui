@@ -30,7 +30,7 @@ export class RouterService {
 
   /**
    * Initializes the router and sets up event listeners. Performs initial route check.
-   * should be called once by top-level CodexRouterProvider.
+   * should be called once by top-level RouterProvider.
    */
   public init(): void {
     window.addEventListener('popstate', this._handlePopState);
