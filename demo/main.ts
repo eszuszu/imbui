@@ -8,6 +8,9 @@ import {
 import { Signal, signal } from "@imbui/pulse";
 // You can get all of these with just "@imbui/core" too, this is just showcasing the modularity,
 // no need for `imbui/core` grab what you want, or, use what you need~
+import { ElementRegistryService, LoggerService } from "@imbui/core";
+
+const logger = new LoggerService();
 
 const appInfusion = infuse(
   HTMLElement,
@@ -49,8 +52,8 @@ const appSlots = () => html`
 <slot name="content-slot"></slot>
 <slot name="footer-slot"></slot>
 `
-
-export const init = customElements.define(
+const elementRegistryService = new ElementRegistryService(logger);
+export const init = elementRegistryService.define(
   'app-',
   class App extends appInfusion {
     globalSignal!: Signal<number>;
@@ -71,6 +74,7 @@ export const init = customElements.define(
       this.adoptedStyleSheets = [this.sheet];
       this.dynamicClass = 'test';
       this.buttonText = signal<string>('Click Me!');
+      elementRegistryService.getSnapshot();
     }
     // base mixin always attaches to a shadow dom,
     // so we need to make a slot element if we want the original
@@ -96,6 +100,8 @@ export const init = customElements.define(
         
           });
       }, 4000);
+
+      logger.log(`${elementRegistryService.constructor.name}`, elementRegistryService.listDefinitions())
     }
     
     handler = () => {
@@ -125,6 +131,7 @@ export const init = customElements.define(
             this.buttonText.get(),
           ), this.updatableElements['counter'], undefined, this.runtime);
       }
+      logger.log(`${elementRegistryService.constructor.name}`, elementRegistryService.getSnapshot())
     }
   
     disconnectedCallback(): void {
