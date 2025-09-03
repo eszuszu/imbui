@@ -27,8 +27,9 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'json', 'lcov'],
       reportsDirectory: './coverage',
-      exclude: ['node_modules', 'dist', '**/demo/**']
+      exclude: ['node_modules', 'dist', '**/demo/**'],
     },
+    setupFiles: './tests/setup.ts'
   },
   plugins: [
     dts({
