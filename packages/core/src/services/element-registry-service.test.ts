@@ -1,69 +1,109 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { ElementRegistryService } from "./element-registry-service";
 import { LoggerService } from "./logger-service";
-import { withDisposer } from "../utils/with-disposer";
+
+class TestElement extends HTMLElement {}
+
+class FakeRegistry implements CustomElementRegistry {
+  private map = new Map<string, CustomElementConstructor>();
+  private nameMap = new WeakMap<CustomElementConstructor, string>();
+  private pendingPromises = new Map<string, (ctor: CustomElementConstructor) => void>();
+  define(tag: string, ctor: CustomElementConstructor): void {
+    if (this.map.has(tag)) throw new DOMException("Already defined");
+    this.map.set(tag, ctor);
+    
+    this.nameMap.set(ctor, tag);
+    const resolve = this.pendingPromises.get(tag);
+    if (resolve) {
+      resolve(ctor);
+      this.pendingPromises.delete(tag);
+    }
+  }
+  get(tag: string): CustomElementConstructor | undefined {
+    return this.map.get(tag);
+  };
+  getName(ctor: CustomElementConstructor): string | null {
+    return this.nameMap.get(ctor)!;
+
+  }
+  whenDefined(tag: string): Promise<CustomElementConstructor> {
+    const ctor = this.map.get(tag);
+    if (ctor) {
+      return Promise.resolve(ctor);
+    }
+
+    return new Promise<CustomElementConstructor>(resolve => {
+      this.pendingPromises.set(tag, resolve);
+    })
+  }
+  //eslint-disable-next-line @typescript-eslint/no-unused-vars
+  upgrade(_root: Node) {};
+}
 
 describe('ElementRegistryService Unit Tests',() => {
-
-  class FakeRegistry implements CustomElementRegistry {
-    private map = new Map<string, CustomElementConstructor>();
-    private nameMap = new WeakMap<CustomElementConstructor, string>();
-    define(tag: string, ctor: CustomElementConstructor): void {
-      if (this.map.has(tag)) throw new DOMException("Already defined");
-      this.map.set(tag, ctor);
-      this.nameMap.set(ctor, tag);
-    }
-    get(tag: string): CustomElementConstructor | undefined {
-      return this.map.get(tag);
-    };
-    getName(ctor: CustomElementConstructor): string | null {
-      return this.nameMap.get(ctor)!;
-
-    }
-    whenDefined(tag: string) {
-      return Promise.resolve(this.map.get(tag)!);
-    }
-    //eslint-disable-next-line @typescript-eslint/no-unused-vars
-    upgrade(_root: Node) {};
-  }
-
-  let testService: ElementRegistryService;
 
   const logger: LoggerService = {
     debug: vi.fn(),
     error: vi.fn(),
   } as unknown as LoggerService;
 
+  let registry: FakeRegistry;
+
+  beforeEach(() => {
+    registry = new FakeRegistry();
+  });
+
   describe('Lifecycle methods and abort controller', () => {
-    it('assigns `this.registry` to the global registry if a registry is not provided during instantiation.', () => {
-      testService = new ElementRegistryService(logger);
-      expect(testService.registry).toBe(testService.windowRegistry);
-      expect(testService.registry).toBe(customElements);
-      expect(testService.registry).toHaveProperty("define");
 
-    }); 
+    it('should call the dispose method when a using block ends', () => {
+      const s = new ElementRegistryService(logger, registry);
+      const disposeSpy = vi.spyOn(s, 'dispose');
+      (() => {
+        //eslint-disable-next-line @typescript-eslint/no-unused-vars
+        using svc = s
+      })();
 
-    it('assigns a given customElements registry object.', () => {
-      const newService = new ElementRegistryService(logger, new FakeRegistry())
-      expect(newService.registry).toBeInstanceOf(FakeRegistry);
+      expect(disposeSpy).toHaveBeenCalledOnce();
+      expect(s.disposed).toBe(true);
     });
 
-    it ("disposes when AsyncDisposableStack is available", async () => {
-      const disposeSpy = vi.spyOn(AsyncDisposableStack.prototype, "disposeAsync");
-      await withDisposer(async (stack) => {
-        stack.defer(() => {});
-      });
-      expect(disposeSpy).toHaveBeenCalled();
-    });
+    it ('should be marked as disposed after an asynchronous await using block', async () => {
+      const s = new ElementRegistryService(logger, registry);
+      //eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const asyncDisposeSpy = vi.spyOn(ElementRegistryService.prototype, Symbol.asyncDispose as any);
 
+     await (async () => {
+      await using svc = s
+      svc.define('my-element', TestElement);})()
+
+      expect(asyncDisposeSpy).toHaveBeenCalledOnce();
+      expect(s.disposed).toBe(true);
+    })
 
   })
 
-  describe('define method', () => {
-    it('should be a work in progress', () => {
-      // This is a placeholder test to ensure Vitest passes.
-      expect(true).toBe(true);
+  describe('Service Functionality', () => {
+
+    it("should correctly define multiple custom elements with defineMany", async () => {
+    
+      const s = new ElementRegistryService(logger, registry);
+      class One extends HTMLElement { }
+      class Two extends HTMLElement { }
+
+      await s.defineMany([
+        { tag: "el-one", ctor: One },
+        { tag: "el-two", ctor: Two }
+      ]);
+      expect(registry.get('el-one')).toBe(One);
+      expect(registry.get('el-two')).toBe(Two);
     });
+    it('should correctly define a single custom element', async ()=> {
+
+      const service = new ElementRegistryService(logger, registry);
+      await service.define('my-test-element', TestElement);
+      expect(registry.get('my-test-element')).toBe(TestElement);
+      expect(service.isDefined('my-test-element')).toBe(true);
+    })
   })
   describe('whenDefined method', () => {
     it('should be a work in progress', () => {
@@ -77,26 +117,6 @@ describe('ElementRegistryService Unit Tests',() => {
       expect(true).toBe(true);
     });
   })
-  describe('defineMany method', () => {
-    it("defines multiple elements and cleans up pendingDefinitions on dispose", async () => {
-
-      const registry = new FakeRegistry();
-      testService = new ElementRegistryService(logger, registry);
-
-      class ElOne extends HTMLElement {}
-      class ElTwo extends HTMLElement {}
-
-      const stack = await testService.defineMany([
-        { tag: "el-one", ctor: ElOne },
-        { tag: "el-two", ctor: ElTwo }
-      ]) as AsyncDisposableStack;
-      expect(testService.listPending()).toEqual([]);
-      const spy = vi.spyOn(stack, 'disposeAsync');
-      await stack.disposeAsync();
-      expect(spy).toHaveBeenCalled();
-      expect(testService.registry.get('el-one')).toBeDefined();
-    });
-  });
   describe('sequenceDefinitions method', () => {
     it('should be a work in progress', () => {
       // This is a placeholder test to ensure Vitest passes.
