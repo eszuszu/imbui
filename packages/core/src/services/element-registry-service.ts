@@ -6,7 +6,8 @@ export class ElementRegistryService extends BaseService {
   windowRegistry: CustomElementRegistry = customElements;
   registry!: CustomElementRegistry;
   private definitions = new Map<string, CustomElementConstructor>();
-  private pendingDefinitions = new Map<string, Promise<CustomElementConstructor>>();
+  pendingDefinitions = new Map<string, Promise<CustomElementConstructor>>();
+  private resolvers = new Map<string, (ctor: CustomElementConstructor) => void>();
   private logger: LoggerService = console as unknown as LoggerService;
 
   constructor(logger: LoggerService, registry?: CustomElementRegistry) {
@@ -46,30 +47,31 @@ export class ElementRegistryService extends BaseService {
     }
 
     if (this.registry.get(tagName)) {
-      this.definitions.set(tagName, customElements.get(tagName)!); // cache defensively;
+      this.definitions.set(tagName, this.registry.get(tagName)!); // cache defensively;
       this.logger.debug(`${this.prettyName}Custom element ${tagName} already defined by native registry.`)
       return Promise.resolve();
     }
 
-    if (this.pendingDefinitions.has(tagName)) {
-      this.logger.debug(`${this.prettyName} Definition of ${tagName} is already pending`)
-      await this.pendingDefinitions.get(tagName)!;
-      return;
-    }
+    if (!this.pendingDefinitions.has(tagName)) {
+      const promise = new Promise<CustomElementConstructor>(resolve => {
+        this.resolvers.set(tagName, resolve);
 
-    const definePromise = this.registry.whenDefined(tagName)
-      .then((ctor) => {
-        this.definitions.set(tagName, ctor);
-        this.pendingDefinitions.delete(tagName);
-        this.logger.debug(`${this.prettyName} Custom element ${tagName} succesfully defined.`)
-        return ctor;
       });
-
-    this.pendingDefinitions.set(tagName, definePromise);
+      this.pendingDefinitions.set(tagName, promise);
+    }
 
     try {
       this.registry.define(tagName, constructor);
-      await definePromise; //Wait for the definition promise to resolve
+
+      
+      const resolve = this.resolvers.get(tagName);
+      if (resolve) {
+        resolve(constructor);
+        this.resolvers.delete(tagName);
+      }
+      
+      this.definitions.set(tagName, constructor);
+      this.pendingDefinitions.delete(tagName);
     } catch (error) {
       this.logger.error(`Failed to define custom element ${tagName}:`, error);
       this.pendingDefinitions.delete(tagName); //Clean up if definition fails
@@ -88,8 +90,7 @@ export class ElementRegistryService extends BaseService {
     const tags = new Set(
       [...undefinedElements].map((child) => child.localName)
     );
-    const promises = [...tags].map((tag) => this.registry.whenDefined(tag));
-
+    const promises = [...tags].map((tag) => this.whenDefined(tag, mergedSignal));
     return Promise.all(promises);
   }
 
@@ -107,15 +108,21 @@ export class ElementRegistryService extends BaseService {
       this.logger.debug(`${this.prettyName} Returning pending definition promise for ${tagName}.`);
       return this.pendingDefinitions.get(tagName)!;
     }
-    //If not in cache or pending, defer to native 'customElements.whenDefined'.
-    // This handles cases where the element might be defined by other means,
-    // or, if 'define' was called but there is 'awaiting' from a different context
-    this.logger.debug(`${this.prettyName} Waiting for ${tagName} via native whenDefined fallback`);
-    return this.windowRegistry.whenDefined(tagName);
+
+    const promise = new Promise<CustomElementConstructor>(resolve => {
+      this.resolvers.set(tagName, resolve)
+    })
+    this.pendingDefinitions.set(tagName, promise);
+    this.logger.debug(`${this.prettyName} Waiting for ${tagName} via deferred promise.`);
+    return promise
   }
 
   isDefined(tagName: string): boolean {
-    return this.definitions.has(tagName) || this.pendingDefinitions.has(tagName) || this.registry.get(tagName) !== undefined;
+    return this.definitions.has(tagName) || this.registry.get(tagName) !== undefined;
+  }
+
+  isPending(tagName: string): boolean {
+    return this.pendingDefinitions.has(tagName);
   }
 
   getConstructor(tagName: string): CustomElementConstructor | undefined {

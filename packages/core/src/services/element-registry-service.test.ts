@@ -4,80 +4,69 @@ import { LoggerService } from "./logger-service";
 
 class TestElement extends HTMLElement {}
 
-class FakeRegistry implements CustomElementRegistry {
-  private map = new Map<string, CustomElementConstructor>();
-  private nameMap = new WeakMap<CustomElementConstructor, string>();
-  private pendingPromises = new Map<string, (ctor: CustomElementConstructor) => void>();
-  define(tag: string, ctor: CustomElementConstructor): void {
-    if (this.map.has(tag)) throw new DOMException("Already defined");
-    this.map.set(tag, ctor);
-    
-    this.nameMap.set(ctor, tag);
-    const resolve = this.pendingPromises.get(tag);
-    if (resolve) {
-      resolve(ctor);
-      this.pendingPromises.delete(tag);
-    }
-  }
-  get(tag: string): CustomElementConstructor | undefined {
-    return this.map.get(tag);
-  };
-  getName(ctor: CustomElementConstructor): string | null {
-    return this.nameMap.get(ctor)!;
+const mockRegistry = (() => {
+    const definitions = new Map();
+    const resolvers = new Map();
 
-  }
-  whenDefined(tag: string): Promise<CustomElementConstructor> {
-    const ctor = this.map.get(tag);
-    if (ctor) {
-      return Promise.resolve(ctor);
-    }
-
-    return new Promise<CustomElementConstructor>(resolve => {
-      this.pendingPromises.set(tag, resolve);
+    return {
+    get: vi.fn(tag => definitions.get(tag)),
+    define: vi.fn((tag, ctor) => {
+      definitions.set(tag, ctor);
+      if (resolvers.has(tag)) {
+        resolvers.get(tag)(ctor);
+        resolvers.delete(tag);
+      }
+    }),
+    whenDefined: vi.fn(tag => {
+      if (definitions.has(tag)) {
+        return Promise.resolve(definitions.get(tag));
+  
+      }
+      return new Promise(resolve => resolvers.set(tag, resolve));
     })
   }
-  //eslint-disable-next-line @typescript-eslint/no-unused-vars
-  upgrade(_root: Node) {};
-}
+})();
+
+const logger: LoggerService = {
+  debug: vi.fn(),
+  error: vi.fn(),
+} as unknown as LoggerService;
 
 describe('ElementRegistryService Unit Tests',() => {
 
-  const logger: LoggerService = {
-    debug: vi.fn(),
-    error: vi.fn(),
-  } as unknown as LoggerService;
-
-  let registry: FakeRegistry;
+  let svc: ElementRegistryService;
 
   beforeEach(() => {
-    registry = new FakeRegistry();
+    vi.clearAllMocks();
+    svc = new ElementRegistryService(logger, mockRegistry as unknown as CustomElementRegistry);
   });
 
   describe('Lifecycle methods and abort controller', () => {
 
     it('should call the dispose method when a using block ends', () => {
-      const s = new ElementRegistryService(logger, registry);
-      const disposeSpy = vi.spyOn(s, 'dispose');
+
+      const disposeSpy = vi.spyOn(svc, 'dispose');
       (() => {
         //eslint-disable-next-line @typescript-eslint/no-unused-vars
-        using svc = s
+        using s = svc
       })();
 
       expect(disposeSpy).toHaveBeenCalledOnce();
-      expect(s.disposed).toBe(true);
+      expect(svc.disposed).toBe(true);
     });
 
     it ('should be marked as disposed after an asynchronous await using block', async () => {
-      const s = new ElementRegistryService(logger, registry);
+
       //eslint-disable-next-line @typescript-eslint/no-explicit-any
       const asyncDisposeSpy = vi.spyOn(ElementRegistryService.prototype, Symbol.asyncDispose as any);
 
      await (async () => {
-      await using svc = s
+       //eslint-disable-next-line @typescript-eslint/no-unused-vars
+      await using s = svc
       svc.define('my-element', TestElement);})()
 
       expect(asyncDisposeSpy).toHaveBeenCalledOnce();
-      expect(s.disposed).toBe(true);
+      expect(svc.disposed).toBe(true);
     })
 
   })
@@ -86,43 +75,109 @@ describe('ElementRegistryService Unit Tests',() => {
 
     it("should correctly define multiple custom elements with defineMany", async () => {
     
-      const s = new ElementRegistryService(logger, registry);
       class One extends HTMLElement { }
       class Two extends HTMLElement { }
 
-      await s.defineMany([
+      await svc.defineMany([
         { tag: "el-one", ctor: One },
         { tag: "el-two", ctor: Two }
       ]);
-      expect(registry.get('el-one')).toBe(One);
-      expect(registry.get('el-two')).toBe(Two);
+      expect(mockRegistry.get('el-one')).toBe(One);
+      expect(mockRegistry.get('el-two')).toBe(Two);
     });
     it('should correctly define a single custom element', async ()=> {
 
-      const service = new ElementRegistryService(logger, registry);
-      await service.define('my-test-element', TestElement);
-      expect(registry.get('my-test-element')).toBe(TestElement);
-      expect(service.isDefined('my-test-element')).toBe(true);
+
+      await svc.define('my-test-element', TestElement);
+      expect(mockRegistry.get('my-test-element')).toBe(TestElement);
+      expect(svc.isDefined('my-test-element')).toBe(true);
     })
   })
-  describe('whenDefined method', () => {
-    it('should be a work in progress', () => {
-      // This is a placeholder test to ensure Vitest passes.
-      expect(true).toBe(true);
-    });
+  it('should resolve immediately if the element has already been defined', async () => {
+
+    await svc.define('pending-el', TestElement);
+    await expect(svc.whenDefined('pending-el')).resolves.toStrictEqual(TestElement);
+  });
+  it('should return the same pending promise from pendingDefinitions map when whenDefined returns', async () => {
+    const whenDefinedPromise = svc.whenDefined('pending-el');
+
+    expect(whenDefinedPromise).toStrictEqual(svc.pendingDefinitions.get('pending-el'));
+    await svc.define('pending-el', TestElement);
+
   })
+
   describe('awaitUndefinedChildren method', () => {
-    it('should be a work in progress', () => {
-      // This is a placeholder test to ensure Vitest passes.
-      expect(true).toBe(true);
+    
+    it('should resolve a promise with the correct constructor', async () => {
+     
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = '<undefined-el></undefined-el>';
+      class NewTestEl extends HTMLElement {};
+      expect(svc.isDefined('undefined-el')).toBe(false);
+
+      const childrenPromise = svc.awaitUndefinedChildren(tempDiv);
+      expect(svc.isPending('undefined-el')).toBe(true);
+      //await svc.define('undefined-el', NewTestEl)
+
+      await svc.define('undefined-el', NewTestEl);
+
+      const result = await childrenPromise;
+      expect(result).toEqual([NewTestEl]);
+      expect(svc.isPending('undefined-el')).toBe(false);
+      expect(svc.isDefined('undefined-el')).toBe(true);
     });
+
+    it('should return an array that contains the constructors for all unique undefined children', async () => {
+
+      const tempDiv = document.createElement('div');
+
+      tempDiv.innerHTML = `<test-one><test-two></test-two></test-one>`
+
+      class TestOne extends HTMLElement { };
+      class TestTwo extends HTMLElement { };
+      const childrenPromise = svc.awaitUndefinedChildren(tempDiv);
+
+      expect(svc.pendingDefinitions.has('test-one')).toBe(true);
+      expect(svc.pendingDefinitions.has('test-two')).toBe(true);
+
+      expect(svc.isDefined('test-one')).toBe(false);
+      expect(svc.isDefined('test-two')).toBe(false);
+      
+      await svc.define('test-one', TestOne);
+      await svc.define('test-two', TestTwo);
+
+      const result = await childrenPromise;
+
+      expect(result).toEqual([TestOne, TestTwo]);
+      expect(svc.isDefined('test-one')).toBe(true);
+      expect(svc.isDefined('test-two')).toBe(true);
+    })
   })
   describe('sequenceDefinitions method', () => {
-    it('should be a work in progress', () => {
-      // This is a placeholder test to ensure Vitest passes.
-      expect(true).toBe(true);
+    it('should define elements sequentially and execute the callback after each definition', async () => {
+      const defs = [
+        { tag: "el-one", ctor: class One extends HTMLElement { } },
+        { tag: "el-two", ctor: class Two extends HTMLElement { } }
+      ];
+
+      const defineSpy = vi.spyOn(svc, 'define');
+
+      const mockCallback = vi.fn();
+
+      await svc.sequenceDefinitions(defs, mockCallback);
+      // Check that define was called for each element in the correct order
+      expect(defineSpy).toHaveBeenCalledTimes(2);
+      expect(defineSpy).toHaveBeenNthCalledWith(1, "el-one", defs[0].ctor, undefined);
+      expect(defineSpy).toHaveBeenNthCalledWith(2, "el-two", defs[1].ctor, undefined);
+
+      // Check that the callback was called after each definition
+      expect(mockCallback).toHaveBeenCalledTimes(2);
+
+      expect(defineSpy.mock.invocationCallOrder[0]).toBeLessThan(mockCallback.mock.invocationCallOrder[0]);
+      expect(mockCallback.mock.invocationCallOrder[0]).toBeLessThan(defineSpy.mock.invocationCallOrder[1]);
+      expect(defineSpy.mock.invocationCallOrder[1]).toBeLessThan(mockCallback.mock.invocationCallOrder[1]);
     });
-  })
+  });
 
 
-})
+});
