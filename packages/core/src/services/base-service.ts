@@ -1,6 +1,6 @@
 export abstract class BaseService {
   protected abortController = new AbortController();
-  protected disposed = false;
+  disposed = false;
 
   init?(): void | Promise<void>;
   reset?(): void | Promise<void>;
