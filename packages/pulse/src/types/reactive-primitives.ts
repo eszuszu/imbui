@@ -7,6 +7,11 @@ export type Signal<T> = {
   update: (updater: (prev: T) => T) => void;
 }
 
+export type Computed<T> = {
+  get(): T;
+  cleanup(): void;
+}
+
 //Effect function type primitive
 export type EffectFn = () => void;
 

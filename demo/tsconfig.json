@@ -11,6 +11,7 @@
   "include": [
     "vite.config.ts",
     "main.ts",
+    "./components/banner/banner.ts"
   ],
   "exclude": [
     "node_modules",

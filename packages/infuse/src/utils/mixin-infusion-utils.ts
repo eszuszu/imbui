@@ -12,7 +12,7 @@ type ApplyOneMixin<TBaseC extends Constructor<any>, TMixinFn extends MixinFuncti
 
 /**
  * Recursively applies an array of mixins to a base class from left to right.
- * this type accurately infers the final combiend class constructor type.
+ * this type accurately infers the final combined class constructor type.
  * 
  * @template TBase Initial base class of constructor type.
  * @template TMixins Readonly tuple of mixin functions.

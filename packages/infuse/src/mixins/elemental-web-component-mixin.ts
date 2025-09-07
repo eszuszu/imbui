@@ -2,9 +2,9 @@ import { WebComponentConstructor } from "./types";
 
 export type TemplateUsage = 'shadow-slots' | 'shadow-full' | 'light-structure' | 'default-slot-content' | string
 
-export const ElementalWebComponentMixin = <TBase extends WebComponentConstructor<HTMLElement>>(Base: TBase) => {
+export const ElementalWebComponentMixin = <TBase extends WebComponentConstructor>(Base: TBase) => {
 
-  const ElementalWebComponentClass = class extends Base {
+  class ElementalWebComponentClass extends Base {
     //Raw template strings
     public _rawTemplates = new Map<TemplateUsage, string>();
 

@@ -12,6 +12,10 @@ export interface CustomElementLifecycleMethods {
 
 export type WebComponentConstructor<T extends HTMLElement = HTMLElement> = Constructor<T & CustomElementLifecycleMethods>;
 
+export type WebComponentMixin = <TBase extends Constructor<HTMLElement>>(
+  Base: TBase,
+) => Constructor<InstanceType<TBase> & CustomElementLifecycleMethods>
+
 /**
  * @template TBase The constructor type of the class being extended by the mixin.
  * @template TResultInstance The type of the instance that the mixin adds to the base class, usually infered from mixin's class declaration.
