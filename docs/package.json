@@ -1,0 +1,22 @@
+{
+  "name": "imbui-docs",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@imbui/core": "workspace:*",
+    "@imbuil/infuse": "workspace:*",
+    "@imbui/pulse": "workspace:*",
+    "@imbui/cast": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "@types/node": "^22.15.2",
+    "vite": "^6.3.3"
+  }
+}
