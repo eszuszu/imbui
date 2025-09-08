@@ -15,8 +15,8 @@ interface AttributeMethods {
   hasAttribute(name: string): boolean;
   getAttribute(name: string): string | null;
 }
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type WebComponentInstance = HTMLElement & ReactiveWebComponentInterface & AttributeMethods & CustomElementLifecycleMethods & { [key: string]: any };
+
+export type WebComponentInstance = HTMLElement & ReactiveWebComponentInterface & AttributeMethods & CustomElementLifecycleMethods & { [key: string]: unknown };
 
 
 // This is a accessor decorator function for reflecting attributes to and from the DOM in web components, in vite dev, 'ES2022' is needed for esbuild.target in defineConfig

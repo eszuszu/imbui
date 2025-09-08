@@ -7,19 +7,18 @@ import { WebComponentConstructor } from "@imbui/infuse";
 
 export const ContextProviderMixin = <TBase extends WebComponentConstructor<HTMLElement>>(Base: TBase) =>
   class ContextProvider extends Base {
-    public scope!: ServiceScope;
-
-    public _scopeInitializedPromise: Promise<void>;
-    public _resolveScopeInitialized!: () => void;
+    public providerScope!: ServiceScope;
+    public scopeReady: Promise<void>;
+    public resolveScope!: () => void;
 
     // flag to indicate if the scope has been explicitly set as root
-    public _isRootScopeExplicitlySet: boolean = false;
-
+    public isRootSet: boolean = false;
+    public isSecureScope = true;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
       super(...args);
-      this._scopeInitializedPromise = new Promise(resolve => {
-        this._resolveScopeInitialized = resolve;
+      this.scopeReady = new Promise(resolve => {
+        this.resolveScope = resolve;
       });
 
       this.addEventListener('context-request', this.handleContextRequest as EventListener)
@@ -32,13 +31,13 @@ export const ContextProviderMixin = <TBase extends WebComponentConstructor<HTMLE
      * @param rootScope The pre-instantiated root ServiceScope singleton
      */
     public setAsRootScopeProvider(rootScope: ServiceScope): void {
-      if (this._isRootScopeExplicitlySet) {
+      if (this.isRootSet) {
         console.warn(`[${this.tagName || 'ContextProviderMixin'}] Root scope already explicitly set. Ignoring redundant call.`);
         return;
       }
-      this.scope = rootScope;
-      this._resolveScopeInitialized();
-      this._isRootScopeExplicitlySet = true;
+      this.providerScope = rootScope;
+      this.resolveScope();
+      this.isRootSet = true;
       console.log(`[${this.tagName || [ContextProviderMixin]}] Scope explicitly set as root`);
     }
 
@@ -47,12 +46,12 @@ export const ContextProviderMixin = <TBase extends WebComponentConstructor<HTMLE
 
       //Only attempt to request a parent scope and fork if the scope
       //hasn't been explicitly set as the root
-      if (!this._isRootScopeExplicitlySet) {
+      if (!this.isRootSet) {
 
         this.requestParentScope().then(parentScope => {
-          this.scope = parentScope.fork();
+          this.providerScope = parentScope.fork();
           console.log(`[${this.tagName}] Initialized scope by forking parent. Parent scope...`)
-          this._resolveScopeInitialized();
+          this.resolveScope();
 
         }).catch(error => {
           console.error(`[${this.tagName}] failed to establish ServiceScope:`, error);
@@ -63,21 +62,21 @@ export const ContextProviderMixin = <TBase extends WebComponentConstructor<HTMLE
     }
 
 
-    public provideContext<T>(key: string | symbol, service: T): void {
-      this._scopeInitializedPromise.then(() => {
-        this.scope.provide(key, service);
+    public provideContext<T>(key: symbol, service: T): void {
+      this.scopeReady.then(() => {
+        this.providerScope.provide(key, service);
         console.log(`[${this.tagName}] Providing context for key: ${String(key)}`);
       });
     }
 
     public handleContextRequest = (event: ContextRequestEvent<ServiceScope>): void => {
-      this._scopeInitializedPromise.then(() => {
+      this.scopeReady.then(() => {
         const { contextKey, callback } = event;
 
-        if (contextKey === SERVICE_SCOPE_CONTEXT_KEY && this.scope) {
-          callback(this.scope);
+        if (contextKey === SERVICE_SCOPE_CONTEXT_KEY && this.providerScope) {
+          callback(this.providerScope);
           event.stopPropagation();
-          console.log(`[${this.tagName}] Provided context scope (${this.scope}) to a requester.`);
+          console.log(`[${this.tagName}] Provided context scope (${this.providerScope}) to a requester.`);
         } else {
           console.log(`[${this.tagName}] Does not have Context for key: ${String(contextKey)}, letting event bubble`);
         }
@@ -86,18 +85,25 @@ export const ContextProviderMixin = <TBase extends WebComponentConstructor<HTMLE
 
     public requestParentScope(): Promise<ServiceScope> {
       return new Promise(resolve => {
-        const requestEvent = new ContextRequestEvent<ServiceScope>(SERVICE_SCOPE_CONTEXT_KEY, (parentScope: ServiceScope) => {
-          resolve(parentScope);
-        });
+        let resolved = false;
+        const requestEvent = new ContextRequestEvent<ServiceScope>(
+          SERVICE_SCOPE_CONTEXT_KEY,
+          scope => { resolved = true; resolve(scope); }
+        );
         this.dispatchEvent(requestEvent);
-
-        setTimeout(() => {
-          if (!this.scope) {
+        queueMicrotask(() => {
+          if (!resolved) {
             console.warn(`[${this.tagName}] No parent ContextProvider found for ServiceScope. Falling back to global RootServiceScope`);
             resolve(RootServiceScope);
           }
-        }, 0);
+        });
       })
+    }
+
+    setSecureScope(rootScope: ServiceScope, allowedKeys: symbol[]): void {
+      this.providerScope = rootScope.secureFork(allowedKeys);
+      this.resolveScope();
+      this.isRootSet = true;
     }
 
     disconnectedCallback() {

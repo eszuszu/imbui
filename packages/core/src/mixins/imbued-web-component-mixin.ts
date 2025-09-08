@@ -1,7 +1,7 @@
 import { ServiceScope } from "../root/service-scope";
 import { LoggerService } from "../services/logger-service";
-import { CustomElementRegistryService } from "../services/element-registry-service";
-import { LoggerServiceKey, CustomElementRegistryServiceKey } from "../identifiers/service-keys";
+import { ElementRegistryService } from "../services/element-registry-service";
+import { LoggerServiceKey, ElementRegistryServiceKey } from "../identifiers/service-keys";
 import { ContextRequestEvent } from "../events/context-request-event";
 import { SERVICE_SCOPE_CONTEXT_KEY } from "../identifiers/context-keys";
 import { WebComponentConstructor } from "@imbui/infuse";
@@ -11,64 +11,64 @@ export const ImbuedWebComponentMixin = <TBase extends WebComponentConstructor<HT
   const ImbuedWebComponentClass = class extends Base {
 
     logger!: LoggerService;
-    customElementRegistryService!: CustomElementRegistryService;
-    currentServiceScope!: ServiceScope;
+    ElementRegistryService!: ElementRegistryService;
+    currentScope!: ServiceScope;
 
-    public _servicesReadyPromise: Promise<void>;
-    public _resolveServicesReady!: () => void;
+    public servicesReady: Promise<void>;
+    public resolveServices!: () => void;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    public _rejectServicesReady!: (reason?: any) => void;
+    public rejectServices!: (reason?: any) => void;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
       super(...args);
 
-      this._servicesReadyPromise = new Promise((resolve, reject) => {
-        this._resolveServicesReady = resolve;
-        this._rejectServicesReady = reject;
+      this.servicesReady = new Promise((resolve, reject) => {
+        this.resolveServices = resolve;
+        this.rejectServices = reject;
       });
     }
 
     connectedCallback(): void {
       super.connectedCallback?.();
 
-      if (!this.currentServiceScope) {
+      if (!this.currentScope) {
         this.requestServiceScope();
       } else {
         this.logger?.log(`[${this.tagName}] Re-connected, services already established.`);
       }
     }
 
-    public async getService<T>(key: string | symbol): Promise<T> {
-      await this._servicesReadyPromise;
-      if (!this.currentServiceScope) {
-        throw new Error(`[${this.tagName}] currentServiceScope is not set after servicesReadyPromise resolved for key: ${String(key)}`);
+    public async getService<T>(key: symbol): Promise<T> {
+      await this.servicesReady;
+      if (!this.currentScope) {
+        throw new Error(`[${this.tagName}] scope is not set after servicesReadyPromise resolved for key: ${String(key)}`);
       }
-      return this.currentServiceScope.get<T>(key);
+      return this.currentScope.get<T>(key);
     }
 
     public requestServiceScope(): void {
       const event = new ContextRequestEvent<ServiceScope>(SERVICE_SCOPE_CONTEXT_KEY, (scope: ServiceScope) => {
-        this.currentServiceScope = scope;
+        this.currentScope = scope;
         try {
-          this.logger = this.currentServiceScope.get<LoggerService>(LoggerServiceKey);
+          this.logger = this.currentScope.get<LoggerService>(LoggerServiceKey);
 
-          this.customElementRegistryService = this.currentServiceScope.get<CustomElementRegistryService>(CustomElementRegistryServiceKey);
+          this.ElementRegistryService = this.currentScope.get<ElementRegistryService>(ElementRegistryServiceKey);
 
-          if (this.logger && this.customElementRegistryService) {
-            this._resolveServicesReady();
+          if (this.logger && this.ElementRegistryService) {
+            this.resolveServices();
             this.logger.log(`[${this.tagName}] Received ServiceScope and initialized all required services.`);
           } else {
             const missingServices = [
               !this.logger && 'LoggerService',
-              !this.customElementRegistryService && 'CustomElementRegistryService'
+              !this.ElementRegistryService && 'ElementRegistryService'
             ].filter(Boolean).join(', ');
             const errorMsg = `[${this.tagName}] failed to assign one or more required services: ${missingServices}`;
-            this._rejectServicesReady(new Error(errorMsg));
+            this.rejectServices(new Error(errorMsg));
           }
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
           console.error(`[${this.tagName}] Failed to retrieve a required service from scope:`, error);
-          this._rejectServicesReady(error);
+          this.rejectServices(error);
         }
       });
       this.dispatchEvent(event);

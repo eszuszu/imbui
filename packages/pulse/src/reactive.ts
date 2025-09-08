@@ -1,4 +1,4 @@
-import type { Signal, EffectFn, EffectRunner } from "./types/reactive-primitives";
+import type { Signal, Computed, EffectFn, EffectRunner } from "./types/reactive-primitives";
 
 //A pointer to the current effect and a closure over it's dependencies
 let currentEffect: EffectRunner | null = null;
@@ -94,11 +94,11 @@ export function signal<T>(initial: T): Signal<T> {
 }
 
 //basic computed incapsulated signal subscribes to internal signal w/ effect.
-export function computed<T>(fn: () => T) {
+export function computed<T>(fn: () => T): Computed<T>{
   let value = fn();
   const internal = signal<T>(value);
 
-  effect(() => {
+  const cleanupFn = effect(() => {
     const newValue = fn();
     if (!Object.is(newValue, value)) {
       value = newValue;
@@ -107,6 +107,7 @@ export function computed<T>(fn: () => T) {
   });
 
   return {
-    get: internal.get
+    get: internal.get,
+    cleanup: cleanupFn
   };
 }

@@ -1,11 +1,11 @@
 import type { WebComponentConstructor } from "./types";
-import { signal, effect } from "@imbui/pulse";
+import { signal, effect, computed } from "@imbui/pulse";
 import type { Signal } from "@imbui/pulse";
 
 
 export const ReactiveWebComponentMixin = <TBase extends WebComponentConstructor>(Base: TBase) => {
 
-  const ReactiveWebComponentClass = class extends Base {
+  class ReactiveWebComponentClass extends Base {
     static observedAttributes: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public _reactiveSignals = new Map<PropertyKey, Signal<any>>();
@@ -43,6 +43,12 @@ export const ReactiveWebComponentMixin = <TBase extends WebComponentConstructor>
     createEffect(callback: () => void): void {
       const cleanupFn = effect(callback);
       this._effectCleanups.add(cleanupFn);
+    }
+
+    createComputed<T>(callback: () => T): { get: () => T } {
+      const { get, cleanup } = computed(callback);
+      this._effectCleanups.add(cleanup);
+      return { get };
     }
 
     connectedCallback() {

@@ -3,7 +3,7 @@ import { ElementRegistryService } from "./element-registry-service";
 import { LoggerService } from "./logger-service";
 
 class TestElement extends HTMLElement {}
-
+// This is not to pollute the window registry.
 const mockRegistry = (() => {
     const definitions = new Map();
     const resolvers = new Map();
@@ -56,7 +56,6 @@ describe('ElementRegistryService Unit Tests',() => {
     });
 
     it ('should be marked as disposed after an asynchronous await using block', async () => {
-
       //eslint-disable-next-line @typescript-eslint/no-explicit-any
       const asyncDisposeSpy = vi.spyOn(ElementRegistryService.prototype, Symbol.asyncDispose as any);
 
@@ -98,10 +97,10 @@ describe('ElementRegistryService Unit Tests',() => {
     await svc.define('pending-el', TestElement);
     await expect(svc.whenDefined('pending-el')).resolves.toStrictEqual(TestElement);
   });
-  it('should return the same pending promise from pendingDefinitions map when whenDefined returns', async () => {
+  it('should return the same pending promise from pending map when whenDefined returns', async () => {
     const whenDefinedPromise = svc.whenDefined('pending-el');
 
-    expect(whenDefinedPromise).toStrictEqual(svc.pendingDefinitions.get('pending-el'));
+    expect(whenDefinedPromise).toStrictEqual(svc.pending.get('pending-el'));
     await svc.define('pending-el', TestElement);
 
   })
@@ -137,8 +136,8 @@ describe('ElementRegistryService Unit Tests',() => {
       class TestTwo extends HTMLElement { };
       const childrenPromise = svc.awaitUndefinedChildren(tempDiv);
 
-      expect(svc.pendingDefinitions.has('test-one')).toBe(true);
-      expect(svc.pendingDefinitions.has('test-two')).toBe(true);
+      expect(svc.pending.has('test-one')).toBe(true);
+      expect(svc.pending.has('test-two')).toBe(true);
 
       expect(svc.isDefined('test-one')).toBe(false);
       expect(svc.isDefined('test-two')).toBe(false);

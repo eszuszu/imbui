@@ -2,7 +2,7 @@ import { getKeyframeEffect, getDefaultEffectOptions } from "./keyframe-definitio
 import { AnimationController } from "./animation-controller";
 import type { LoggerService } from "../services/logger-service";
 
-type AnimationInput = string | { keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: KeyframeAnimationOptions };
+export type AnimationInput = string | { keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: KeyframeAnimationOptions };
 
 export interface DomAnimatorFactory {
   createAnimation(element: HTMLElement, animationInput: AnimationInput): AnimationController;
