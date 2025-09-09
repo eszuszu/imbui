@@ -1,2 +1,3 @@
-const hello = () => { return console.log('hello') };
-hello();
+import { createApp } from "./utils/create-app";
+
+createApp('imbui-docs');
