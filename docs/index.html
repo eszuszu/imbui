@@ -32,7 +32,9 @@
               <a>Quick Start</a>
             </li>
             <li class="container">
-              <a>Pulse</a>
+              <router-link to="/pulse">
+                <a href="/pulse">Pulse</a>
+              </router-link>
             </li>
             <li class="container">
               <a>Cast</a>
@@ -133,7 +135,11 @@
         </nav>
       </aside>
     </ui-sidebar>
-    <main></main>
+    <main>
+      <ui-view>
+        <page-intro data-projected="page"></page-intro>
+      </ui-view>
+    </main>
     <ui-footer class="container">
       <footer>asdf</footer>
     </ui-footer>
