@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@imbui/core": "workspace:*",
-    "@imbuil/infuse": "workspace:*",
+    "@imbui/infuse": "workspace:*",
     "@imbui/pulse": "workspace:*",
     "@imbui/cast": "workspace:*"
   },

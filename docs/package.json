@@ -1,5 +1,5 @@
 {
-  "name": "imbui-docs",
+  "name": "docs",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,14 +9,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@imbui/cast": "workspace:*",
     "@imbui/core": "workspace:*",
-    "@imbuil/infuse": "workspace:*",
-    "@imbui/pulse": "workspace:*",
-    "@imbui/cast": "workspace:*"
+    "@imbui/infuse": "workspace:*",
+    "@imbui/pulse": "workspace:*"
   },
   "devDependencies": {
-    "typescript": "^5.8.3",
     "@types/node": "^22.15.2",
+    "gray-matter": "^4.0.3",
+    "typescript": "^5.8.3",
     "vite": "^6.3.3"
   }
 }
