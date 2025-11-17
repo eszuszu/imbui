@@ -4,8 +4,8 @@ import {
   ReactiveWebComponentMixin,
   ImbuedWebComponentMixin,
   infuse,
-  cast,
-  die,
+  //cast,
+  //die,
 } from "@imbui/core";
 
 const PageIntroInfusion = infuse(
@@ -19,13 +19,12 @@ const PageIntroInfusion = infuse(
 export class PageIntro extends PageIntroInfusion {
   constructor() {
     super();
-
+    this.shadowRoot.append(document.createElement('slot'));
   }
 
 
   connectedCallback(): void {
     super.connectedCallback?.();
 
-    cast(die`<div>HELLO!</div>`, this.shadowRoot);
   }
 }

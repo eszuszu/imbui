@@ -16,7 +16,11 @@ import { DATA_SERVICE_KEY, DataService } from "../services/data-service";
 import type { Page } from "../services/types";
 import { PageDocs } from "../components/pages/page-docs";
 import { PageIntro } from "../components/pages/page-intro";
+import { PageError } from "../components/pages/page-error";
+import { PageEssentials } from "../components/pages/page-essentials";
 import { View } from "../components/view";
+import { Overlay } from "../components/overlay";
+import { ThemeToggle } from "../components/theme";
 
 const rootScope = new ServiceScope();
 const logger = new LoggerService();
@@ -58,13 +62,17 @@ export function createApp(tag: string) {
     [
       { tag: tag, ctor: App },
       { tag: 'router-link', ctor: Link},
+      { tag: 'theme-toggle', ctor: ThemeToggle},
       { tag: 'ui-container', ctor: Container },
       { tag: 'ui-layer', ctor: Layer },
       { tag: 'ui-header', ctor: Header },
       { tag: 'ui-sidebar', ctor: Sidebar },
       { tag: 'page-docs', ctor: PageDocs },
+      { tag: 'page-error', ctor: PageError },
       { tag: 'page-intro', ctor: PageIntro},
-      { tag: 'ui-view', ctor: View }
+      { tag: 'page-essentials', ctor: PageEssentials },
+      { tag: 'ui-view', ctor: View },
+      { tag: 'ui-overlay', ctor: Overlay}
     ]
   );
 }

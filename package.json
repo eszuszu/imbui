@@ -5,7 +5,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "pnpm -r build",
+    "build:packages": "pnpm -r --stream --filter='./packages/**' build",
+    "build:docs": "pnpm --filter='./docs' build",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "prepare": "husky",
     "test": "pnpm -r test",

@@ -12,63 +12,76 @@ export const  APP_ROUTES: RouteConfig[] = [
     isSSRReady: true
   },
   {
-    path: '/quick-start',
+    path: '/guide/quick-start',
     componentTag: 'page-start',
     title: '',
     isSSRReady: true
   },
+
   {
-    path: '/pulse',
+    path: '/api/pulse',
     componentTag: 'page-docs',
     title: '',
     isSSRReady: true
   },
   {
-    path: '/cast',
+    path: '/api/cast',
     componentTag: 'page-docs',
     title: '',
     isSSRReady: true
   },
   {
-    path: '/infuse',
+    path: '/api/infuse',
     componentTag: 'page-docs',
     title: '',
     isSSRReady: true
   },
   {
-    path: '/core',
+    path: '/api/core',
     componentTag: 'page-docs',
     title: '',
     isSSRReady: true
   },
   {
-    path: '/colophon',
-    componentTag: 'page-colophon',
+    path: '/about',
+    componentTag: 'page-about',
     title: '',
     isSSRReady: true
   },
 
   //Dynamic collections/index pages (dynamic segments)
   {
-    path: '/pulse/:api',
-    componentTag: () => 'page-docs',
+    path: '/guide/essentials/:api',
+    componentTag: 'page-essentials',
+    title: (page) => `imbui / essentials - ${page.api}`,
+    isSSRReady: true
+  },
+  {
+    path: '/api/pulse/:api',
+    componentTag: 'page-docs',
     title: (page) => `imbui / pulse - ${page.api}`,
     isSSRReady: true
   },
   {
-    path: '/cast/:api',
+    path: '/api/cast/:api',
     componentTag: 'page-docs',
     title: (page) => `imbui / cast - ${page.api}`,
     isSSRReady: true
   },
   {
-    path: '/infuse/:api',
+    path: '/api/infuse/:api',
     componentTag: 'page-docs',
     title: (page) => `imbui / infuse - ${page.api}`,
     isSSRReady: true
   },
   {
-    path: '/core/:api',
+    path: '/api/core/:api',
+    componentTag: 'page-docs',
+    title: (page) => `imbui / core - ${page.api}`,
+    isSSRReady: true
+  },
+  {
+    path: '/api/core/:api',
     componentTag: 'page-docs',
     title: (page) => `imbui / core - ${page.api}`,
     isSSRReady: true

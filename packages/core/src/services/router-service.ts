@@ -88,11 +88,13 @@ export class RouterService {
 
     if (matched) {
       this._logger.warn(`Matched route: ${matched.route.path}`, JSON.stringify(matched.params));
+      
       this.currentRoute.set({
         config: matched.route,
         params: matched.params,
         path: path
       });
+      console.log(JSON.stringify(matched.route.componentTag));
     } else {
       // No route matched, fallback to 404 or default
       this._logger.warn(`No route matched for path: ${path}. Falling back to 404.`);

@@ -3,21 +3,20 @@ import { resolve } from 'path';
 
 export default defineConfig({
 
-  root: __dirname,
+  root: resolve(__dirname, 'src'),
   //enables the standard decorators for now, idk why esnext doesn't work?
   esbuild: {
     target: 'ES2022'
   },
   build: {
-    outDir: './dist',
+    outDir: '../dist',
     emptyOutDir: true,
-  },
-  resolve: {
-    alias: {
-      '@imbui/core': resolve(__dirname, '../packages/core/src'),
-      '@imbui/infuse': resolve(__dirname, '../packages/infuse/src'),
-      '@imbui/pulse': resolve(__dirname, '../packages/pulse/src'),
-      '@imbui/cast': resolve(__dirname, '../packages/cast/src'),
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, './src/pages/index.html'),
+        pages: resolve(__dirname, './src/pages/index.html'),
+        essentials: resolve(__dirname, './src/pages/essentials/index.html')
+      },
     },
   },
 });

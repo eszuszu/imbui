@@ -24,6 +24,6 @@ export interface Page {
   id: string;
   created: string; //ISO
   updated?: string;
-  canonical_url?: string;
+  canonicalUrl?: string;
   content: PageBody;
 }

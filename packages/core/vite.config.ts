@@ -7,20 +7,20 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
       name: 'ImbuiCore',
-      fileName: (format) => `index.${format}.js`,
-      formats: ['es', 'cjs'],
+      formats: ['es'],
+      fileName: `index.mjs`,
     },
     rollupOptions: {
       external: ['@imbui/pulse', '@imbui/infuse', '@imbui/cast'],
     },
   },
-  resolve: {
-    alias: {
-      '@imbui/pulse': path.resolve(__dirname, '../pulse/src'),
-      '@imbui/infuse': path.resolve(__dirname, '../infuse/src'),
-      '@imbui/cast': path.resolve(__dirname, '../cast/src'),
-    }
-  },
+  // resolve: {
+  //   alias: {
+  //     '@imbui/pulse': path.resolve(__dirname, '../pulse/src'),
+  //     '@imbui/infuse': path.resolve(__dirname, '../infuse/src'),
+  //     '@imbui/cast': path.resolve(__dirname, '../cast/src'),
+  //   }
+  // },
   test: {
     environment: 'jsdom',
     coverage: {
@@ -35,6 +35,7 @@ export default defineConfig({
     dts({
       insertTypesEntry: true,
       outDir: './dist',
+      exclude: ['**/*.test.ts'],
     })
   ]
 });
