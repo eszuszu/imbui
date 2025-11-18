@@ -6,6 +6,7 @@ export default tseslint.config(
   {
     ignores: [
       "eslint.config.js",
+      "commitlint.config.mjs",
       "**/dist/**",
       "**/demo/**",
       "**/node_modules/**",
