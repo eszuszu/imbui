@@ -1,0 +1,787 @@
+{
+  "meta": {
+    "title": "Intro",
+    "tag": "page-intro",
+    "api": "intro",
+    "created": "2025-09-12",
+    "updated": "2025-09-14",
+    "slug": "intro",
+    "id": "2025-09-12-intro",
+    "version": 1,
+    "changelog": [
+      {
+        "date": "2025-09-14",
+        "note": "Published via script"
+      }
+    ]
+  },
+  "tokens": [
+    {
+      "type": "space",
+      "raw": "\n"
+    },
+    {
+      "type": "heading",
+      "raw": "## imbui is a forward looking, front-end toolkit for authoring browser native Custom Element web components and interactive experiences.\n\n",
+      "depth": 2,
+      "text": "imbui is a forward looking, front-end toolkit for authoring browser native Custom Element web components and interactive experiences.",
+      "tokens": [
+        {
+          "type": "text",
+          "raw": "imbui is a forward looking, front-end toolkit for authoring browser native Custom Element web components and interactive experiences.",
+          "text": "imbui is a forward looking, front-end toolkit for authoring browser native Custom Element web components and interactive experiences.",
+          "escaped": false
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "raw": "Built to utilize the browser and client-side capabilities, outside of the black-box of monolithic frameworks and ecosystems—*imbui* takes a *framework atomics* approach instead. It offers modular, composable packages, that can be used together synergistically or can individually slot into your project; Modern approaches to reactivity with `signals` and `effects`, *component mixins*, *decorators*, and utilities, and a small *templating engine* built on tagged template literals provide an endless range of possibilites to compose and design.",
+      "text": "Built to utilize the browser and client-side capabilities, outside of the black-box of monolithic frameworks and ecosystems—*imbui* takes a *framework atomics* approach instead. It offers modular, composable packages, that can be used together synergistically or can individually slot into your project; Modern approaches to reactivity with `signals` and `effects`, *component mixins*, *decorators*, and utilities, and a small *templating engine* built on tagged template literals provide an endless range of possibilites to compose and design.",
+      "tokens": [
+        {
+          "type": "text",
+          "raw": "Built to utilize the browser and client-side capabilities, outside of the black-box of monolithic frameworks and ecosystems—",
+          "text": "Built to utilize the browser and client-side capabilities, outside of the black-box of monolithic frameworks and ecosystems—",
+          "escaped": false
+        },
+        {
+          "type": "em",
+          "raw": "*imbui*",
+          "text": "imbui",
+          "tokens": [
+            {
+              "type": "text",
+              "raw": "imbui",
+              "text": "imbui",
+              "escaped": false
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "raw": " takes a ",
+          "text": " takes a ",
+          "escaped": false
+        },
+        {
+          "type": "em",
+          "raw": "*framework atomics*",
+          "text": "framework atomics",
+          "tokens": [
+            {
+              "type": "text",
+              "raw": "framework atomics",
+              "text": "framework atomics",
+              "escaped": false
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "raw": " approach instead. It offers modular, composable packages, that can be used together synergistically or can individually slot into your project; Modern approaches to reactivity with ",
+          "text": " approach instead. It offers modular, composable packages, that can be used together synergistically or can individually slot into your project; Modern approaches to reactivity with ",
+          "escaped": false
+        },
+        {
+          "type": "codespan",
+          "raw": "`signals`",
+          "text": "signals"
+        },
+        {
+          "type": "text",
+          "raw": " and ",
+          "text": " and ",
+          "escaped": false
+        },
+        {
+          "type": "codespan",
+          "raw": "`effects`",
+          "text": "effects"
+        },
+        {
+          "type": "text",
+          "raw": ", ",
+          "text": ", ",
+          "escaped": false
+        },
+        {
+          "type": "em",
+          "raw": "*component mixins*",
+          "text": "component mixins",
+          "tokens": [
+            {
+              "type": "text",
+              "raw": "component mixins",
+              "text": "component mixins",
+              "escaped": false
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "raw": ", ",
+          "text": ", ",
+          "escaped": false
+        },
+        {
+          "type": "em",
+          "raw": "*decorators*",
+          "text": "decorators",
+          "tokens": [
+            {
+              "type": "text",
+              "raw": "decorators",
+              "text": "decorators",
+              "escaped": false
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "raw": ", and utilities, and a small ",
+          "text": ", and utilities, and a small ",
+          "escaped": false
+        },
+        {
+          "type": "em",
+          "raw": "*templating engine*",
+          "text": "templating engine",
+          "tokens": [
+            {
+              "type": "text",
+              "raw": "templating engine",
+              "text": "templating engine",
+              "escaped": false
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "raw": " built on tagged template literals provide an endless range of possibilites to compose and design.",
+          "text": " built on tagged template literals provide an endless range of possibilites to compose and design.",
+          "escaped": false
+        }
+      ]
+    },
+    {
+      "type": "space",
+      "raw": "\n\n"
+    },
+    {
+      "type": "paragraph",
+      "raw": "**the vision, imbui**",
+      "text": "**the vision, imbui**",
+      "tokens": [
+        {
+          "type": "strong",
+          "raw": "**the vision, imbui**",
+          "text": "the vision, imbui",
+          "tokens": [
+            {
+              "type": "text",
+              "raw": "the vision, imbui",
+              "text": "the vision, imbui",
+              "escaped": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "space",
+      "raw": "\n\n"
+    },
+    {
+      "type": "paragraph",
+      "raw": "Learn the fundamentals of native *custom elements*, the *shadow DOM* and alternative approaches to style isolation, and more. Open up a whole new paradigm of building on the client. ",
+      "text": "Learn the fundamentals of native *custom elements*, the *shadow DOM* and alternative approaches to style isolation, and more. Open up a whole new paradigm of building on the client. ",
+      "tokens": [
+        {
+          "type": "text",
+          "raw": "Learn the fundamentals of native ",
+          "text": "Learn the fundamentals of native ",
+          "escaped": false
+        },
+        {
+          "type": "em",
+          "raw": "*custom elements*",
+          "text": "custom elements",
+          "tokens": [
+            {
+              "type": "text",
+              "raw": "custom elements",
+              "text": "custom elements",
+              "escaped": false
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "raw": ", the ",
+          "text": ", the ",
+          "escaped": false
+        },
+        {
+          "type": "em",
+          "raw": "*shadow DOM*",
+          "text": "shadow DOM",
+          "tokens": [
+            {
+              "type": "text",
+              "raw": "shadow DOM",
+              "text": "shadow DOM",
+              "escaped": false
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "raw": " and alternative approaches to style isolation, and more. Open up a whole new paradigm of building on the client. ",
+          "text": " and alternative approaches to style isolation, and more. Open up a whole new paradigm of building on the client. ",
+          "escaped": false
+        }
+      ]
+    },
+    {
+      "type": "space",
+      "raw": "\n\n"
+    },
+    {
+      "type": "paragraph",
+      "raw": "SPA, SSR, SSG, RPC, alphabet soup! Don't know what any of this is? That's okay, sometimes you just want a static website with a game—or widget; you're prototyping, learning, perfect. I built `imbui` with *learners*, *design engineers*, *prototypers* and *framework authors* in mind, that means its meant to be as unopinionated as I can make it. No React, Angular, Vue, or Svelte, not even Solid, or Lit. *imbui* was built with no outside dependendencies, just dev dependencies. That means you can use it as a base, pick pieces of it apart, or extend it at will without needing to buy into any other ecosystem.",
+      "text": "SPA, SSR, SSG, RPC, alphabet soup! Don't know what any of this is? That's okay, sometimes you just want a static website with a game—or widget; you're prototyping, learning, perfect. I built `imbui` with *learners*, *design engineers*, *prototypers* and *framework authors* in mind, that means its meant to be as unopinionated as I can make it. No React, Angular, Vue, or Svelte, not even Solid, or Lit. *imbui* was built with no outside dependendencies, just dev dependencies. That means you can use it as a base, pick pieces of it apart, or extend it at will without needing to buy into any other ecosystem.",
+      "tokens": [
+        {
+          "type": "text",
+          "raw": "SPA, SSR, SSG, RPC, alphabet soup! Don't know what any of this is? That's okay, sometimes you just want a static website with a game—or widget; you're prototyping, learning, perfect. I built ",
+          "text": "SPA, SSR, SSG, RPC, alphabet soup! Don't know what any of this is? That's okay, sometimes you just want a static website with a game—or widget; you're prototyping, learning, perfect. I built ",
+          "escaped": false
+        },
+        {
+          "type": "codespan",
+          "raw": "`imbui`",
+          "text": "imbui"
+        },
+        {
+          "type": "text",
+          "raw": " with ",
+          "text": " with ",
+          "escaped": false
+        },
+        {
+          "type": "em",
+          "raw": "*learners*",
+          "text": "learners",
+          "tokens": [
+            {
+              "type": "text",
+              "raw": "learners",
+              "text": "learners",
+              "escaped": false
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "raw": ", ",
+          "text": ", ",
+          "escaped": false
+        },
+        {
+          "type": "em",
+          "raw": "*design engineers*",
+          "text": "design engineers",
+          "tokens": [
+            {
+              "type": "text",
+              "raw": "design engineers",
+              "text": "design engineers",
+              "escaped": false
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "raw": ", ",
+          "text": ", ",
+          "escaped": false
+        },
+        {
+          "type": "em",
+          "raw": "*prototypers*",
+          "text": "prototypers",
+          "tokens": [
+            {
+              "type": "text",
+              "raw": "prototypers",
+              "text": "prototypers",
+              "escaped": false
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "raw": " and ",
+          "text": " and ",
+          "escaped": false
+        },
+        {
+          "type": "em",
+          "raw": "*framework authors*",
+          "text": "framework authors",
+          "tokens": [
+            {
+              "type": "text",
+              "raw": "framework authors",
+              "text": "framework authors",
+              "escaped": false
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "raw": " in mind, that means its meant to be as unopinionated as I can make it. No React, Angular, Vue, or Svelte, not even Solid, or Lit. ",
+          "text": " in mind, that means its meant to be as unopinionated as I can make it. No React, Angular, Vue, or Svelte, not even Solid, or Lit. ",
+          "escaped": false
+        },
+        {
+          "type": "em",
+          "raw": "*imbui*",
+          "text": "imbui",
+          "tokens": [
+            {
+              "type": "text",
+              "raw": "imbui",
+              "text": "imbui",
+              "escaped": false
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "raw": " was built with no outside dependendencies, just dev dependencies. That means you can use it as a base, pick pieces of it apart, or extend it at will without needing to buy into any other ecosystem.",
+          "text": " was built with no outside dependendencies, just dev dependencies. That means you can use it as a base, pick pieces of it apart, or extend it at will without needing to buy into any other ecosystem.",
+          "escaped": false
+        }
+      ]
+    },
+    {
+      "type": "space",
+      "raw": "\n\n"
+    },
+    {
+      "type": "heading",
+      "raw": "## Packages\n\n",
+      "depth": 2,
+      "text": "Packages",
+      "tokens": [
+        {
+          "type": "text",
+          "raw": "Packages",
+          "text": "Packages",
+          "escaped": false
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "raw": "**`imbui/pulse`**",
+      "text": "**`imbui/pulse`**",
+      "tokens": [
+        {
+          "type": "strong",
+          "raw": "**`imbui/pulse`**",
+          "text": "`imbui/pulse`",
+          "tokens": [
+            {
+              "type": "codespan",
+              "raw": "`imbui/pulse`",
+              "text": "imbui/pulse"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "space",
+      "raw": "\n\n"
+    },
+    {
+      "type": "paragraph",
+      "raw": "**`imbui/cast`**",
+      "text": "**`imbui/cast`**",
+      "tokens": [
+        {
+          "type": "strong",
+          "raw": "**`imbui/cast`**",
+          "text": "`imbui/cast`",
+          "tokens": [
+            {
+              "type": "codespan",
+              "raw": "`imbui/cast`",
+              "text": "imbui/cast"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "space",
+      "raw": "\n\n"
+    },
+    {
+      "type": "paragraph",
+      "raw": "**`imbui/infuse`** (dependency: pulse)",
+      "text": "**`imbui/infuse`** (dependency: pulse)",
+      "tokens": [
+        {
+          "type": "strong",
+          "raw": "**`imbui/infuse`**",
+          "text": "`imbui/infuse`",
+          "tokens": [
+            {
+              "type": "codespan",
+              "raw": "`imbui/infuse`",
+              "text": "imbui/infuse"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "raw": " (dependency: pulse)",
+          "text": " (dependency: pulse)",
+          "escaped": false
+        }
+      ]
+    },
+    {
+      "type": "space",
+      "raw": "\n\n"
+    },
+    {
+      "type": "paragraph",
+      "raw": "**`imbui/core`** (dependency: pulse & infuse)",
+      "text": "**`imbui/core`** (dependency: pulse & infuse)",
+      "tokens": [
+        {
+          "type": "strong",
+          "raw": "**`imbui/core`**",
+          "text": "`imbui/core`",
+          "tokens": [
+            {
+              "type": "codespan",
+              "raw": "`imbui/core`",
+              "text": "imbui/core"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "raw": " (dependency: pulse & infuse)",
+          "text": " (dependency: pulse & infuse)",
+          "escaped": false
+        }
+      ]
+    },
+    {
+      "type": "space",
+      "raw": "\n\n"
+    },
+    {
+      "type": "paragraph",
+      "raw": "Each package can be imported individually.",
+      "text": "Each package can be imported individually.",
+      "tokens": [
+        {
+          "type": "text",
+          "raw": "Each package can be imported individually.",
+          "text": "Each package can be imported individually.",
+          "escaped": false
+        }
+      ]
+    },
+    {
+      "type": "space",
+      "raw": "\n\n"
+    },
+    {
+      "type": "paragraph",
+      "raw": "`core` is the most opinionated and includes both pulse and infuse. It's a microframework for custom elements  built with imbui's other packages, but with no opinion about rendering to the DOM beyond custom elemnts. It offers the scaffolding for more involved projects: a context provider API, dependency injection workflows, services for client-side routing. Fetching utilities, and animation helpers, and exposes `infuse` and `pulse` and their primitives for your own building.",
+      "text": "`core` is the most opinionated and includes both pulse and infuse. It's a microframework for custom elements  built with imbui's other packages, but with no opinion about rendering to the DOM beyond custom elemnts. It offers the scaffolding for more involved projects: a context provider API, dependency injection workflows, services for client-side routing. Fetching utilities, and animation helpers, and exposes `infuse` and `pulse` and their primitives for your own building.",
+      "tokens": [
+        {
+          "type": "codespan",
+          "raw": "`core`",
+          "text": "core"
+        },
+        {
+          "type": "text",
+          "raw": " is the most opinionated and includes both pulse and infuse. It's a microframework for custom elements  built with imbui's other packages, but with no opinion about rendering to the DOM beyond custom elemnts. It offers the scaffolding for more involved projects: a context provider API, dependency injection workflows, services for client-side routing. Fetching utilities, and animation helpers, and exposes ",
+          "text": " is the most opinionated and includes both pulse and infuse. It's a microframework for custom elements  built with imbui's other packages, but with no opinion about rendering to the DOM beyond custom elemnts. It offers the scaffolding for more involved projects: a context provider API, dependency injection workflows, services for client-side routing. Fetching utilities, and animation helpers, and exposes ",
+          "escaped": false
+        },
+        {
+          "type": "codespan",
+          "raw": "`infuse`",
+          "text": "infuse"
+        },
+        {
+          "type": "text",
+          "raw": " and ",
+          "text": " and ",
+          "escaped": false
+        },
+        {
+          "type": "codespan",
+          "raw": "`pulse`",
+          "text": "pulse"
+        },
+        {
+          "type": "text",
+          "raw": " and their primitives for your own building.",
+          "text": " and their primitives for your own building.",
+          "escaped": false
+        }
+      ]
+    },
+    {
+      "type": "space",
+      "raw": "\n\n"
+    },
+    {
+      "type": "paragraph",
+      "raw": "`infuse` is all about composing custom elements. It introduces the utility `infuse` that makes applying chains of custom element mixins seamless and type aware. It contain's a Base custom element mixin together with a suite of mixins for extensible reactivity and DOM book-keeping. It also includes declarative web component standard TypeScript **decorators**, for hooking into custom elements to extend their behavior—like adding reactive attributes, or logging lifecycle methods.",
+      "text": "`infuse` is all about composing custom elements. It introduces the utility `infuse` that makes applying chains of custom element mixins seamless and type aware. It contain's a Base custom element mixin together with a suite of mixins for extensible reactivity and DOM book-keeping. It also includes declarative web component standard TypeScript **decorators**, for hooking into custom elements to extend their behavior—like adding reactive attributes, or logging lifecycle methods.",
+      "tokens": [
+        {
+          "type": "codespan",
+          "raw": "`infuse`",
+          "text": "infuse"
+        },
+        {
+          "type": "text",
+          "raw": " is all about composing custom elements. It introduces the utility ",
+          "text": " is all about composing custom elements. It introduces the utility ",
+          "escaped": false
+        },
+        {
+          "type": "codespan",
+          "raw": "`infuse`",
+          "text": "infuse"
+        },
+        {
+          "type": "text",
+          "raw": " that makes applying chains of custom element mixins seamless and type aware. It contain's a Base custom element mixin together with a suite of mixins for extensible reactivity and DOM book-keeping. It also includes declarative web component standard TypeScript ",
+          "text": " that makes applying chains of custom element mixins seamless and type aware. It contain's a Base custom element mixin together with a suite of mixins for extensible reactivity and DOM book-keeping. It also includes declarative web component standard TypeScript ",
+          "escaped": false
+        },
+        {
+          "type": "strong",
+          "raw": "**decorators**",
+          "text": "decorators",
+          "tokens": [
+            {
+              "type": "text",
+              "raw": "decorators",
+              "text": "decorators",
+              "escaped": false
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "raw": ", for hooking into custom elements to extend their behavior—like adding reactive attributes, or logging lifecycle methods.",
+          "text": ", for hooking into custom elements to extend their behavior—like adding reactive attributes, or logging lifecycle methods.",
+          "escaped": false
+        }
+      ]
+    },
+    {
+      "type": "space",
+      "raw": "\n\n"
+    },
+    {
+      "type": "paragraph",
+      "raw": "`pulse` powers all of the reactivity in core and is my implementation of `signal` and `effect` primitives and the general design pattern. Super light-weight, pulse can be used alone to drive reactivity in your project, used as the primary reactive driver for `imbui` components or workflows, or to extend custom solutions. Signals hold state, effects react automatically when signals change.",
+      "text": "`pulse` powers all of the reactivity in core and is my implementation of `signal` and `effect` primitives and the general design pattern. Super light-weight, pulse can be used alone to drive reactivity in your project, used as the primary reactive driver for `imbui` components or workflows, or to extend custom solutions. Signals hold state, effects react automatically when signals change.",
+      "tokens": [
+        {
+          "type": "codespan",
+          "raw": "`pulse`",
+          "text": "pulse"
+        },
+        {
+          "type": "text",
+          "raw": " powers all of the reactivity in core and is my implementation of ",
+          "text": " powers all of the reactivity in core and is my implementation of ",
+          "escaped": false
+        },
+        {
+          "type": "codespan",
+          "raw": "`signal`",
+          "text": "signal"
+        },
+        {
+          "type": "text",
+          "raw": " and ",
+          "text": " and ",
+          "escaped": false
+        },
+        {
+          "type": "codespan",
+          "raw": "`effect`",
+          "text": "effect"
+        },
+        {
+          "type": "text",
+          "raw": " primitives and the general design pattern. Super light-weight, pulse can be used alone to drive reactivity in your project, used as the primary reactive driver for ",
+          "text": " primitives and the general design pattern. Super light-weight, pulse can be used alone to drive reactivity in your project, used as the primary reactive driver for ",
+          "escaped": false
+        },
+        {
+          "type": "codespan",
+          "raw": "`imbui`",
+          "text": "imbui"
+        },
+        {
+          "type": "text",
+          "raw": " components or workflows, or to extend custom solutions. Signals hold state, effects react automatically when signals change.",
+          "text": " components or workflows, or to extend custom solutions. Signals hold state, effects react automatically when signals change.",
+          "escaped": false
+        }
+      ]
+    },
+    {
+      "type": "space",
+      "raw": "\n\n"
+    },
+    {
+      "type": "paragraph",
+      "raw": "`cast` is an HTML templating solution built with tagged template literals and the `TemplateStringsArray` they utilize. Inspired by `lit.js`, `marked.js`, and the philosophy of optimized, atomic updates—you can create static html layouts that contain 'slots' for dynamic content. Render nested templates, lists, even create *keyed* lists with the `keyed` directive for truly atomic updates to dynamically rendered list.",
+      "text": "`cast` is an HTML templating solution built with tagged template literals and the `TemplateStringsArray` they utilize. Inspired by `lit.js`, `marked.js`, and the philosophy of optimized, atomic updates—you can create static html layouts that contain 'slots' for dynamic content. Render nested templates, lists, even create *keyed* lists with the `keyed` directive for truly atomic updates to dynamically rendered list.",
+      "tokens": [
+        {
+          "type": "codespan",
+          "raw": "`cast`",
+          "text": "cast"
+        },
+        {
+          "type": "text",
+          "raw": " is an HTML templating solution built with tagged template literals and the ",
+          "text": " is an HTML templating solution built with tagged template literals and the ",
+          "escaped": false
+        },
+        {
+          "type": "codespan",
+          "raw": "`TemplateStringsArray`",
+          "text": "TemplateStringsArray"
+        },
+        {
+          "type": "text",
+          "raw": " they utilize. Inspired by ",
+          "text": " they utilize. Inspired by ",
+          "escaped": false
+        },
+        {
+          "type": "codespan",
+          "raw": "`lit.js`",
+          "text": "lit.js"
+        },
+        {
+          "type": "text",
+          "raw": ", ",
+          "text": ", ",
+          "escaped": false
+        },
+        {
+          "type": "codespan",
+          "raw": "`marked.js`",
+          "text": "marked.js"
+        },
+        {
+          "type": "text",
+          "raw": ", and the philosophy of optimized, atomic updates—you can create static html layouts that contain 'slots' for dynamic content. Render nested templates, lists, even create ",
+          "text": ", and the philosophy of optimized, atomic updates—you can create static html layouts that contain 'slots' for dynamic content. Render nested templates, lists, even create ",
+          "escaped": false
+        },
+        {
+          "type": "em",
+          "raw": "*keyed*",
+          "text": "keyed",
+          "tokens": [
+            {
+              "type": "text",
+              "raw": "keyed",
+              "text": "keyed",
+              "escaped": false
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "raw": " lists with the ",
+          "text": " lists with the ",
+          "escaped": false
+        },
+        {
+          "type": "codespan",
+          "raw": "`keyed`",
+          "text": "keyed"
+        },
+        {
+          "type": "text",
+          "raw": " directive for truly atomic updates to dynamically rendered list.",
+          "text": " directive for truly atomic updates to dynamically rendered list.",
+          "escaped": false
+        }
+      ]
+    },
+    {
+      "type": "space",
+      "raw": "\n\n"
+    },
+    {
+      "type": "heading",
+      "raw": "## Quick Start\n\n",
+      "depth": 2,
+      "text": "Quick Start",
+      "tokens": [
+        {
+          "type": "text",
+          "raw": "Quick Start",
+          "text": "Quick Start",
+          "escaped": false
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "raw": "## Guide\n\n",
+      "depth": 2,
+      "text": "Guide",
+      "tokens": [
+        {
+          "type": "text",
+          "raw": "Guide",
+          "text": "Guide",
+          "escaped": false
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "raw": "## API",
+      "depth": 2,
+      "text": "API",
+      "tokens": [
+        {
+          "type": "text",
+          "raw": "API",
+          "text": "API",
+          "escaped": false
+        }
+      ]
+    }
+  ]
+}

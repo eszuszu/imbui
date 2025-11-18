@@ -227,11 +227,6 @@ Details on how to contribute to the project.
 - **I'm currently looking for help testing, implementing/dialing in code standards/cleanliness, dialing in/defining semantic primitives, elaborating with the project examples, more examples. Also:**
   - help identifying and working through project roadmap and milestones
   - help with managing the project, enabling and promoting communication with all project stakeholders,
-  - currently looking for awesome collaborators and professional mentors, if you are
-    -  attentive,
-    -  sharp,
-    -  passionate,
-    -  and compassionate
     - *I'd love to hear from you, please please please reach out :)* 
 
 ## Feature Requests

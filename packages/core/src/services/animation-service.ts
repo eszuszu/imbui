@@ -7,7 +7,8 @@ import { createDomAnimator, type DomAnimatorFactory } from '../animation/create-
 import { AnimationController } from "../animation/animation-controller";
 import { registerKeyframeEffect } from "../animation/keyframe-definitions";
 
-export type AnimationInput = string | { keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: KeyframeAnimationOptions };
+type AnimationInput = string | { keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: KeyframeAnimationOptions };
+
 
 /**
  * The central Animation Service responsible for global animation orchestration,

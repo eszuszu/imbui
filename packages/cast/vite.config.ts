@@ -8,8 +8,8 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
       name: 'ImbuiCast',
-      fileName: (format) => `index.${format}.js`,
-      formats: ['es', 'cjs'],
+      formats: ['es'],
+      fileName: `index.mjs`,
     },
   },
   test: {
@@ -25,6 +25,7 @@ export default defineConfig({
     dts({
       insertTypesEntry: true,
       outDir: './dist',
+      exclude: ['**/*.test.ts'],
     })
   ]
 });

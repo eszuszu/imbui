@@ -2,13 +2,12 @@
   "name": "@imbui/infuse",
   "version": "0.0.1",
   "description": "The infuse library for custom web component mixins providing reactivity and more",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "type": "module",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "imports": "./dist/index.js",
-      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
       "types": "./dist/index.d.ts"
     }
   },

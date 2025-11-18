@@ -1,3 +1,4 @@
+export * from "./base-service";
 export * from "./animation-service";
 export * from "./element-registry-service";
 export * from "./logger-service";

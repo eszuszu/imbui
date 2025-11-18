@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script>
+    (() => {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        document.documentElement.dataset.theme = savedTheme;
+      }
+    })();
+  </script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="Elizabeth Schwartz - Guide" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="icon" href="favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Radio+Canada:ital,wght@0,300..700;1,300..700&display=swap"
+    rel="stylesheet">
+  <title>imbui - Guide</title>
+</head>
+
+<body>
+  <imbui-docs>
+    <ui-portal class="container"></ui-portal>
+    <ui-overlay class="container">
+
+      <theme-toggle class="container" slot="theme-toggle">
+        <ui-layer class="layer-1"></ui-layer>
+        <ui-layer class="layer-2"></ui-layer>
+        <button>theme</button>
+        <ui-layer class="layer-3"></ui-layer>
+        <ui-layer class="layer-4"></ui-layer>
+      </theme-toggle>
+      <button class="sidebar-toggle" slot="sidebar-toggle">↪</button>
+
+
+    </ui-overlay>
+    <ui-header class="container">
+      <header class="container" slot="header">
+        <hgroup class="container">
+          <h1>imbui Documentation</h1>
+          <p>TypeScript toolkit for the Front-End</p>
+        </hgroup>
+        <nav class="container" aria-labelledby="header">
+          <ul class="container top-nav">
+            <li class="container">
+              <router-link to="/">
+                <a href="/">Intro</a>
+              </router-link>
+            </li>
+            <li class="container">
+              <router-link to="/api/pulse">
+                <a href="/api/pulse">Pulse</a>
+              </router-link>
+            </li>
+            <li class="container">
+              <router-link to="/api/cast"><a href="/api/cast">Cast</a></router-link>
+            </li>
+            <li class="container">
+              <router-link to="/api/infuse"><a href="/api/infuse">Infuse</a></router-link>
+            </li>
+            <li class="container">
+              <router-link to="/api/core"><a href="/api/core">Core</a></router-link>
+            </li>
+            <li class="container">
+              <router-link to="/about"><a href="/about">About</a></router-link>
+            </li>
+          </ul>
+        </nav>
+      </header>
+    </ui-header>
+    <ui-sidebar class="container">
+      <aside class="container" slot="sidebar">
+        <nav aria-labelledby="detailed-navigation">
+          <ui-container>
+            <h2 id="detailed-navigation">Guide</h4>
+          </ui-container>
+          <ul class="container">
+            <li class="container">
+              <router-link to="guide/quick-start">
+                <a href="guide/quick-start">quick start</a>
+              </router-link>
+            </li>
+            <li class="container">
+              <router-link to="/guide/essentials/#custom-elements">
+                <a href="/guide/essentials/#custom-elements">custom elements</a>
+              </router-link>
+            </li>
+            <li class="container">
+              <router-link to="/guide/essentials/#shadow-dom">
+                <a href="/guide/essentials/#shadow-dom">shadow dom</a>
+              </router-link>
+            </li>
+            <li class="container">
+              <router-link to="/guide/essentials/#template-element">
+                <a href="/guide/essentials/#template-element">template element</a>
+              </router-link>
+            </li>
+            <li class="container">
+              <router-link to="/guide/essentials/#slots">
+                <a href="/guide/essentials/#slots">slot element</a>
+              </router-link>
+            </li>
+            <li class="container">
+              <router-link to="/guide/essentials/#template-literals">
+                <a href="/guide/essentials/#template-literals">tagged template literals</a>
+              </router-link>
+            </li>
+            <li class="container">
+              <router-link to="/guide/essentials/#typescript-mixins">
+                <a href="/guide/essentials/#typescript-mixins">TypeScript mixins</a>
+              </router-link>
+            </li>
+            <li class="container">
+              <router-link to="/guide/essentials/#typescript-decorators">
+                <a href="/guide/essentials/#typescript-decorators">TypeScript standard decorators</a>
+              </router-link>
+            </li>
+          </ul>
+          <h2>API</h2>
+          <ul class="container">
+            <li class="container">
+              <router-link to="/api/pulse">
+                <a href="/api/pulse">pulse</a>
+              </router-link>
+              <ul>
+                <li><router-link to="/api/pulse/#signal"><a href="/api/pulse/#signal">signal</a></router-link></li>
+                <li><router-link to="/api/pulse/#effect"><a href="/api/pulse/#effect">effect</a></router-link></li>
+              </ul>
+            </li>
+            <li class="container">
+              <router-link to="/api/cast">
+                <a href="/api/cast">cast</a>
+              </router-link>
+              <ul>
+                <li><router-link to="/api/cast/#die"><a href="/api/cast/#die">die (html)</a></router-link></li>
+                <li><router-link to="/api/cast/#keyed"><a href="/api/cast/#keyed">keyed</a></router-link></li>
+                <li><router-link to="/api/cast/#directives"><a href="/api/cast/#directives">directives</a></router-link>
+                </li>
+                <li><router-link to="/api/cast/#cast"><a href="/api/cast/#cast">cast (render)</a></router-link></li>
+                <li><router-link to="/api/cast/#runtime"><a href="/api/cast/#runtime">runtime</a></router-link></li>
+              </ul>
+            </li>
+            <li class="container">
+              <router-link to="/api/infuse">
+                <a href="/api/infuse">infuse</a>
+              </router-link>
+              <ul>
+                <li><router-link to="/api/infuse/#base-mixin"><a
+                      href="/api/infuse/#base-mixin">BaseMixin</a></router-link></li>
+                <li><router-link to="/api/infuse/#elemental-mixin"><a
+                      href="/api/infuse/#elemental-mixin">ElementalMixin</a></router-link></li>
+                <li><router-link to="/api/infuse/#reactive-mixin"><a
+                      href="/api/infuse/#reactive-mixin">ReactiveMixin</a></router-link></li>
+                <li><router-link to="/api/infuse/#infuse"><a href="/api/infuse/#infuse">infuse</a></router-link></li>
+                <li><router-link to="/api/infuse/#attribute-signal"><a
+                      href="/api/infuse/#attribute-signal">@attributeSignal</a></router-link></li>
+              </ul>
+            </li>
+            <li class="container">
+              <router-link to="/api/core">
+                <a href="/api/core">core</a>
+              </router-link>
+              <ul>
+                <li><router-link to="/api/core/mixins/#context-provider"><a
+                      href="/api/core/mixins/#context-provider">ContextProviderMixin</a></router-link></li>
+                <li><router-link to="/api/core/mixins/#imbued"><a
+                      href="/api/core/mixins/#imbued">ImbuedMixin</a></router-link></li>
+                <li><router-link to="/api/core/mixins/#disposable"><a
+                      href="/api/core/mixins/#disposable">DisposableMixin</a></router-link></li>
+                <li><router-link to="/api/core/services/#service-scope"><a
+                      href="/api/core/services/#service-scope">ServiceScope</a></router-link></li>
+                <li><router-link to="/api/core/services/#base-service"><a
+                      href="/api/core/services/#base-service">BaseService</a></router-link></li>
+                <li><router-link to="/api/core/services/#element-registry-service"><a
+                      href="/api/core/services/#element-registry-service">ElementRegistryService</a></router-link></li>
+                <li><router-link to="/api/core/animation/#dom-animator"><a
+                      href="/api/core/animation/#dom-animator">DomAnimator</a></router-link></li>
+                <li><router-link to="/api/core/animation/#animation-controller"><a
+                      href="/api/core/animation/#animation-controller">AnimationController</a></router-link></li>
+                <li><router-link to="/api/core/animation/#animation-service"><a
+                      href="/api/core/animation/#animation-service">AnimationService</a></router-link></li>
+                <li><router-link to="/api/core/services/#stylesheet-service"><a
+                      href="/api/core/services/#stylesheet-service">StylesheetService</a></router-link></li>
+                <li><router-link to="/api/core/router/#router-service"><a
+                      href="/api/core/router/#router-service">RouterService</a></router-link></li>
+                <li><router-link to="/api/core/router/#route-matcher"><a
+                      href="/api/core/router/#route-matcher">route-matcher</a></router-link></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+    </ui-sidebar>
+    <main>
+      <ui-view>
+
+
+        <!------------------------- page component ---------------------->
+      </ui-view>
+    </main>
+    <ui-footer class="container">
+      <footer>asdf</footer>
+    </ui-footer>
+  </imbui-docs>
+</body>
+<script type="module" src="/main.ts">
+</script>
+
+</html>

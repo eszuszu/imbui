@@ -1,0 +1,28 @@
+{
+  "name": "docs",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "draft": "tsx scripts/create-draft.ts",
+    "publish-md": "tsx scripts/publish-draft.ts",
+    "compile-md": "tsx scripts/compile-md.ts",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@imbui/cast": "workspace:*",
+    "@imbui/core": "workspace:*",
+    "@imbui/infuse": "workspace:*",
+    "@imbui/pulse": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.2",
+    "gray-matter": "^4.0.3",
+    "marked": "^16.2.1",
+    "tsx": "^4.20.5",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.3"
+  }
+}

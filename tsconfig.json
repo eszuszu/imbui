@@ -25,9 +25,9 @@
     "sourceMap": true,
     "esModuleInterop": true,
     "baseUrl": ".",
-    "paths": {
-      "@imbui/*": ["./packages/*/src"],
-    }
+    // "paths": {
+    //   "@imbui/*": ["./packages/*/src"],
+    // }
   },
   "exclude": ["eslint.config.js", "node_modules"],
   "references": [
