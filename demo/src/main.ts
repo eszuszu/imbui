@@ -9,7 +9,7 @@ import { Signal, signal } from "@imbui/pulse";
 // You can get all of these with just "@imbui/core" too, this is just showcasing the modularity,
 // no need for `imbui/core` grab what you want, or, use what you need~
 import { ElementRegistryService, LoggerService } from "@imbui/core";
-import { DemoHeader } from "./components/banner/banner"
+import { DemoHeader } from "./components/banner/banner";
 
 const logger = new LoggerService();
 

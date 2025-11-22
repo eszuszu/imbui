@@ -10,9 +10,8 @@
   },
   "include": [
     "vite.config.ts",
-    "main.ts",
-    "./components/banner/banner.ts"
-  ],
+    "src"
+, "prototypes"  ],
   "exclude": [
     "node_modules",
     "dist"

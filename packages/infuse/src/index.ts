@@ -1,5 +1,6 @@
 export * from './decorators/attribute-decorators';
 export * from './decorators/signal-decorators';
+export * from './decorators/logger-decorator';
 export * from './mixins/base-web-component-mixin';
 export * from './mixins/elemental-web-component-mixin';
 export * from './mixins/reactive-web-component-mixin';

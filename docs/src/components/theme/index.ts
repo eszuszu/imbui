@@ -1,4 +1,4 @@
-import { BaseWebComponentMixin, ElementalWebComponentMixin, infuse, ReactiveWebComponentMixin, signal } from "@imbui/infuse";
+import { BaseWebComponentMixin, ElementalWebComponentMixin, infuse, logged, ReactiveWebComponentMixin, signal } from "@imbui/infuse";
 import type { Signal } from "@imbui/infuse";
 import { DOMAwareMixin } from "../primitives";
 import { ImbuedWebComponentMixin } from "@imbui/core";
@@ -26,6 +26,7 @@ export class ThemeToggle extends ThemeToggleInfusion {
     cast(slots, this.shadowRoot);
   }
   
+  @logged
   connectedCallback(): void {
     this.theme.set(this.getTheme() as ThemeType);
     this.themeToggle = this.querySelector('button');
@@ -51,7 +52,6 @@ export class ThemeToggle extends ThemeToggleInfusion {
     }
     return prefersDark ? 'dark' : 'light';
   }
-
 
   toggleTheme = () => {
     const newTheme = this.theme.get() === 'dark' ? 'light' : 'dark';

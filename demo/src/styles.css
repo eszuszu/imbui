@@ -5,6 +5,20 @@ body {
   margin: 0;
   padding: 0;
 }
+
+demo-header {
+  display: flex;
+  width: 100%;
+  max-width: 368px;
+  margin: 0 auto;
+  justify-content: center;
+  min-height: 38px;
+  max-height: 48px;
+  font-size: 2rem;
+  background-image: linear-gradient(to left, #fff 0%, 8%, #196c61ff 10%, #4c2365ff 90%, 98%, #fff 100%);
+  color: #55d345ff;
+}
+
 h1, [data-projected="counter"] {
   max-width: 100dvw;
   background-image: linear-gradient(rgb(55, 37, 84), rgb(5, 3, 17));
@@ -61,6 +75,10 @@ h1, [data-projected="counter"] {
 }
 
 /* The cool thing about attribute selectors in CSS is you can just do this if you want things in a slot */
+[slot="header-slot"] {
+  display: flex;
+  min-height: 38px;
+}
 
 [slot="intro-slot"] {
   & h1 {

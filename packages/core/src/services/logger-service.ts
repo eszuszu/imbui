@@ -1,6 +1,3 @@
-// This file uses 'any' for logging arguments as their types are unpredictable.
-// We disable the ESLint rule for these specific functions to allow this.
-
 export class LoggerService {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public log(...args: any[]) {
