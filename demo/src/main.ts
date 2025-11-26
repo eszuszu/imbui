@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import { html, Runtime, render, TemplateResult } from "@imbui/cast";
 import {
   ElementalWebComponentMixin,
@@ -8,11 +9,12 @@ import {
 import { Signal, signal } from "@imbui/pulse";
 // You can get all of these with just "@imbui/core" too, this is just showcasing the modularity,
 // no need for `imbui/core` grab what you want, or, use what you need~
-import { ElementRegistryService, LoggerService } from "@imbui/core";
-import { DemoHeader } from "./components/banner/banner"
+import { ConsoleLogger, ElementRegistryService, NoOpLogger } from "@imbui/core";
+import { DemoHeader } from "./components/banner/banner";
 
-const logger = new LoggerService();
-
+//const logger = new ConsoleLogger() as Console;
+const __RUNTIME_MODE__ = import.meta.env.MODE;
+const logger = __RUNTIME_MODE__ === 'production' ? new NoOpLogger() as Console : new ConsoleLogger as Console;
 const appInfusion = infuse(
   HTMLElement,
   BaseWebComponentMixin, // Be aware, all components that use the BaseWebComponentMixin attach an open shadow root by default
@@ -133,7 +135,7 @@ export const init = elementRegistryService.define(
             this.buttonText.get(),
           ), this.updatableElements['counter'], undefined, this.runtime);
       }
-      logger.log(`${elementRegistryService.constructor.name}`, elementRegistryService.getSnapshot())
+      logger.log(`${elementRegistryService.constructor.name}`, count)
     }
   
     disconnectedCallback(): void {

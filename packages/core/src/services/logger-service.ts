@@ -1,51 +1,38 @@
-// This file uses 'any' for logging arguments as their types are unpredictable.
-// We disable the ESLint rule for these specific functions to allow this.
+/// <reference types="vite/client" />
+/* eslint-disable
+  @typescript-eslint/no-unused-vars,
+  @typescript-eslint/no-explicit-any 
+*/
 
-export class LoggerService {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface LogMethods {
+  log?(...args: any[]): void;
+  info?(...args: any[]): void;
+  warn?(...args: any[]): void;
+  error?(...args: any[]): void;
+  debug?(...args: any[]): void;
+}
+
+export class ConsoleLogger {
   public log(...args: any[]) {
     console.log("[LOG]", ...args);
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public info(...args: any[]) {
+    console.info("[INFO]", ...args);
+  }
   public warn(...args: any[]) {
     console.warn("[WARN]", ...args);
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public error(...args: any[]) {
     console.error("[ERROR]", ...args);
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public debug(...args: any[]) {
     if (import.meta.env.DEV) console.debug("[DEBUG]", ...args);
   }
-
-  public scope(scopeName: string): ScopedLogger {
-    return new ScopedLogger(scopeName, this);
-  }
 }
-
-class ScopedLogger {
-  constructor(
-    private scopeName: string,
-    private logger: LoggerService
-  ) { }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public log(...args: any[]) {
-    this.logger.log(`[${this.scopeName}]`, ...args);
-  }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public warn(...args: any[]) {
-    this.logger.warn(`[${this.scopeName}]`, ...args);
-  }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public error(...args: any[]) {
-    this.logger.error(`[${this.scopeName}]`, ...args);
-  }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public debug(...args: any[]) {
-    this.logger.debug(`[${this.scopeName}]`, ...args); // Corrected to use debug()
-  }
+export class NoOpLogger {
+  public log(..._args: unknown[]): void {};
+  public info(..._args: unknown[]): void {};
+  public warn(..._args: unknown[]): void {};
+  public error(..._args: unknown[]): void {};
+  public debug(..._args: unknown[]): void {};
 }

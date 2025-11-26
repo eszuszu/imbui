@@ -59,6 +59,8 @@ export class ServiceScope {
     return new ServiceScope(this)
   }
 
+  // do note nothing is truly secure on the client, however,
+  // this will allow vetted access to 'secure' contexts
   secureFork(allowedKeys: symbol[]): ServiceScope {
     const child = new ServiceScope();
     for (const key of allowedKeys) {

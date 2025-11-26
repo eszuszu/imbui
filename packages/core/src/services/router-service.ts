@@ -1,7 +1,6 @@
 import type { Signal } from "@imbui/pulse";
 import { signal } from "@imbui/pulse";
 
-import type { LoggerService } from "./logger-service";
 import { RouteConfig } from "../router/types";
 import { matchRoute } from "../router/route-matcher";
 
@@ -15,10 +14,10 @@ export class RouterService {
   public readonly currentRoute: Signal<CurrentRouteState>;
   public readonly isLoading: Signal<boolean>;
 
-  private _logger: LoggerService;
+  private _logger: Console;
   private _routesDefinition: RouteConfig[];
 
-  constructor(logger: LoggerService, routes: RouteConfig[]) {
+  constructor(logger: Console, routes: RouteConfig[]) {
     this._logger = logger;
     this._routesDefinition = routes
     this.currentRoute = signal<CurrentRouteState>({ config: null, params: {}, path: '' });

@@ -1,5 +1,3 @@
-import type { LoggerService } from "./logger-service";
-
 interface CssStringConfig {
   key: string;
   stylesheet: string;
@@ -18,9 +16,9 @@ interface RegisteredStylesheet {
 export class StylesheetRegistryService {
   private _stylesheets = new Map<string, RegisteredStylesheet>();
   private _defaultCSSStringConfigs?: CssStringConfig[];
-  private _logger: LoggerService;
+  private _logger: Console;
 
-  constructor(logger: LoggerService, options: StylesheetRegistryOptions = {}) {
+  constructor(logger: Console, options: StylesheetRegistryOptions = {}) {
     this._logger = logger;
 
     const { cssStringConfigs, adoptDocumentStylesheets } = options;

@@ -1,12 +1,14 @@
+/// <reference types="vite/client" />
 import {
   ServiceScope,
   LoggerServiceKey,
   ElementRegistryServiceKey,
   ROUTER_SERVICE_KEY,
   ContextProviderMixin,
+
 } from "@imbui/core";
 
-import { LoggerService, ElementRegistryService, RouterService } from "@imbui/core";
+import { ConsoleLogger, NoOpLogger, ElementRegistryService, RouterService } from "@imbui/core";
 import { DOMAwareMixin } from "../components/primitives";
 import { Header } from "../components/header";
 import { Sidebar } from "../components/sidebar";
@@ -22,20 +24,50 @@ import { View } from "../components/view";
 import { Overlay } from "../components/overlay";
 import { ThemeToggle } from "../components/theme";
 
-const rootScope = new ServiceScope();
-const logger = new LoggerService();
-const elementRegistry = new ElementRegistryService(logger);
-const router = new RouterService(logger, APP_ROUTES);
-const dataService = new DataService<Page>(logger);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(window as any).IMBUI_RUNTIME_MODE = import.meta.env.MODE
+
+class RootFacade {
+  static #__ENV__: string;
+  logger: InstanceType<typeof ConsoleLogger | typeof NoOpLogger> | Console = console;
+  elementRegistry: ElementRegistryService;
+  router: RouterService;
+  dataService: DataService<Page>;
+  root: ServiceScope;
+  constructor() {
+    this.root = new ServiceScope;
+    const root = this.root;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    RootFacade.#__ENV__ = (window as any).IMBUI_RUNTIME_MODE;
+    this.logger = RootFacade.#__ENV__ === 'development' ?  new ConsoleLogger : new NoOpLogger;
+    this.elementRegistry = new ElementRegistryService(this.logger as Console);
+    this.router = new RouterService(this.logger as Console, APP_ROUTES);
+    this.dataService = new DataService<Page>(this.logger);
+    root.provide(LoggerServiceKey, this.logger)
+    root.provide(ElementRegistryServiceKey, this.elementRegistry)
+    root.provide(ROUTER_SERVICE_KEY, this.router);
+    root.provide(DATA_SERVICE_KEY, this.dataService);
+  }
+  getEnv() {
+    return RootFacade.#__ENV__;
+  }
+}
+
+const root = new RootFacade;
 
 class App extends ContextProviderMixin(HTMLElement) {
+  root: RootFacade;
   constructor(){
     super();
+    this.root = root
+    const rootScope = this.root.root;
+    this.logger = rootScope.get(LoggerServiceKey);
     this.setAsRootScopeProvider(rootScope);
-    this.provideContext(LoggerServiceKey, logger);
-    this.provideContext(ElementRegistryServiceKey, elementRegistry);
-    this.provideContext(ROUTER_SERVICE_KEY, router);
-    this.provideContext(DATA_SERVICE_KEY, dataService);
+    console.log(`[APP] Initialized in environment ${this.root.getEnv()}`)
+    // this.provideContext(LoggerServiceKey, rootScope.logger);
+    // this.provideContext(ElementRegistryServiceKey, rootScope.elementRegistry);
+    // this.provideContext(ROUTER_SERVICE_KEY, rootScope.router);
+    // this.provideContext(DATA_SERVICE_KEY, rootScope.dataService);
   }
   connectedCallback(): void {
     const router = this.providerScope.get<RouterService>(ROUTER_SERVICE_KEY);
@@ -43,6 +75,8 @@ class App extends ContextProviderMixin(HTMLElement) {
       router.init();
    }
   }
+
+
 }
 
 class Layer extends DOMAwareMixin(HTMLElement) {
@@ -58,7 +92,7 @@ class Container extends DOMAwareMixin(HTMLElement) {
 }
 
 export function createApp(tag: string) {
-  elementRegistry.defineMany(
+  root.elementRegistry.defineMany(
     [
       { tag: tag, ctor: App },
       { tag: 'router-link', ctor: Link},

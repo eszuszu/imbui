@@ -33,7 +33,8 @@ export class View extends ViewInfusion {
   readonly cachedPages: Map<string, HTMLElement> = new Map();
 
   //private elementRegistry: ElementRegistryService; // this is for if I need to await child definitions
-  private currentPath: string | null = null;
+
+  currentPath: string | null = null;
   private router: RouterService | null = null;
   private view: HTMLSlotElement;
   private viewer;
@@ -54,6 +55,7 @@ export class View extends ViewInfusion {
   }
   
   connectedCallback(){
+    
     super.connectedCallback?.();
 
     this.viewer.loadPage();
@@ -109,7 +111,7 @@ export class View extends ViewInfusion {
               } 
             }
           }
-        }
+        } 
       });
     });
   }

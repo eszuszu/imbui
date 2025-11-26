@@ -1,15 +1,13 @@
 import { defineConfig } from 'vite';
-//import { resolve } from 'path';
+import { resolve } from 'path';
 
 export default defineConfig({
-
-  root: __dirname,
-  // resolve: {
-  //   alias: {
-  //     '@imbui/core': resolve(__dirname, '../packages/core/src'),
-  //     '@imbui/infuse': resolve(__dirname, '../packages/infuse/src'),
-  //     '@imbui/pulse': resolve(__dirname, '../packages/pulse/src'),
-  //     '@imbui/cast': resolve(__dirname, '../packages/cast/src'),
-  //   },
-  // },
+  root: resolve(__dirname, 'src'),
+  esbuild: {
+    target: 'ES2022'
+  },
+  build: {
+    outDir: '../dist',
+    emptyOutDir: true,
+  },
 });

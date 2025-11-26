@@ -1,4 +1,3 @@
-import type { LoggerService } from "./logger-service";
 import { BaseService } from "./base-service";
 
 export class ElementRegistryService extends BaseService {
@@ -8,9 +7,9 @@ export class ElementRegistryService extends BaseService {
   private definitions = new Map<string, CustomElementConstructor>();
   pending = new Map<string, Promise<CustomElementConstructor>>();
   private resolvers = new Map<string, (ctor: CustomElementConstructor) => void>();
-  private logger: LoggerService = console as unknown as LoggerService;
+  private logger: Console = console;
 
-  constructor(logger: LoggerService, registry?: CustomElementRegistry) {
+  constructor(logger: Console, registry?: CustomElementRegistry) {
     super();
     this.prettyName = `[${this.constructor.name}]:`
     this.logger = logger;
@@ -137,7 +136,7 @@ export class ElementRegistryService extends BaseService {
       defs: string[],
     ) => `${name} ${defs} ${this.listPending()}`;
 
-    console.log(output(this.prettyName, this.listDefinitions()));
+    this.logger.log(output(this.prettyName, this.listDefinitions()));
   }
   // this will wipe the current element registry service cache (dumb) but can't wipe the window registry.
   // it ataches a passed instance of a new, different, or mocked registry.
@@ -150,7 +149,7 @@ export class ElementRegistryService extends BaseService {
   cleanup() {
     this.definitions.clear();
     this.pending.clear();
-    this.logger = console as unknown as LoggerService;
+    this.logger = console as unknown as Console;
     this.registry = this.windowRegistry;
   }
 }

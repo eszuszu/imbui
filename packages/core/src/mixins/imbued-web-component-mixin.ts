@@ -1,5 +1,4 @@
 import { ServiceScope } from "../root/service-scope";
-import { LoggerService } from "../services/logger-service";
 import { ElementRegistryService } from "../services/element-registry-service";
 import { LoggerServiceKey, ElementRegistryServiceKey } from "../identifiers/service-keys";
 import { ContextRequestEvent } from "../events/context-request-event";
@@ -10,7 +9,7 @@ export const ImbuedWebComponentMixin = <TBase extends WebComponentConstructor<HT
 
   const ImbuedWebComponentClass = class extends Base {
 
-    logger!: LoggerService;
+    logger?: Console;
     ElementRegistryService!: ElementRegistryService;
     currentScope!: ServiceScope;
 
@@ -50,7 +49,7 @@ export const ImbuedWebComponentMixin = <TBase extends WebComponentConstructor<HT
       const event = new ContextRequestEvent<ServiceScope>(SERVICE_SCOPE_CONTEXT_KEY, (scope: ServiceScope) => {
         this.currentScope = scope;
         try {
-          this.logger = this.currentScope.get<LoggerService>(LoggerServiceKey);
+          this.logger = this.currentScope.get(LoggerServiceKey);
 
           this.ElementRegistryService = this.currentScope.get<ElementRegistryService>(ElementRegistryServiceKey);
 

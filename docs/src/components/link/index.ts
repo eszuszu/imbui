@@ -7,6 +7,7 @@ import {
   infuse,
   attributeSignal,
   ROUTER_SERVICE_KEY,
+  LoggerServiceKey,
   DisposableMixin,
   signal,
 } from "@imbui/core";
@@ -46,6 +47,7 @@ export class Link extends LinkInfusion {
   state = signal<LinkState>('');
   anchor!: HTMLAnchorElement;
   private router!: RouterService;
+  serviceNames!: string[];
   
   constructor() {
     super();
@@ -58,7 +60,10 @@ export class Link extends LinkInfusion {
     const slot = document.createElement('slot');
     this.shadowRoot.append(slot);
 
-    this.getService<RouterService>(ROUTER_SERVICE_KEY).then((service: RouterService) => {
+    this.servicesReady.then(() => {
+      this.router = this.currentScope.get(ROUTER_SERVICE_KEY);
+      this.logger = this.currentScope.get(LoggerServiceKey);
+      this.serviceNames = [`${this.router.constructor.name}, ${this.logger.constructor.name}`];
       const a = this.querySelector('a') as HTMLAnchorElement;
 
       if (!a) {
@@ -68,12 +73,11 @@ export class Link extends LinkInfusion {
         this.anchor.addEventListener('click', this.onNavigate);
       }
 
-      this.router = service;
       this.createEffect(() => {
         this.updateState(this.router);
       });
     }).catch(error => {
-      this.logger?.error(`[${this.tagName}] Failed to get RouterService: `, error);
+      this.logger?.error(`[${this.tagName}] Failed to get required services: `, error);
     })
   }
 
@@ -81,21 +85,21 @@ export class Link extends LinkInfusion {
     event.preventDefault();
 
     if (!this.router) {
-      this.logger?.warn(`${this.prettyName}RouterService not available for navigation. Allowing default link behavior.`);
+      this.logger?.warn(`${this.prettyName} No Router Service available for navigation. Allowing default link behavior.`);
       return;
     }
 
     const targetPath = this.to;
 
     if(!targetPath) {
-      this.logger?.warn(`${this.prettyName}'to' attribute is missing. Not navigating.`);
+      this.logger?.warn(`${this.prettyName} 'to' attribute is missing. Not navigating.`);
       return;
     }
 
     const targetUrl = new URL(targetPath, window.location.href);
 
     if (targetUrl.hostname !== window.location.hostname) {
-      this.logger.log(`${this.prettyName} External link detected: ${targetPath}. Allowing default browser behavior.`);
+      this.logger?.log(`${this.prettyName} External link detected: ${targetPath}. Allowing default browser behavior.`);
       window.open(targetUrl.href, this.anchor.target || '_self');
       return;
     }
@@ -113,7 +117,7 @@ export class Link extends LinkInfusion {
       window.open(targetUrl.href, '_blank');
       return;
     }
-    this.logger.log(`${this.prettyName}Navigating to: ${targetPath}`);
+    this.logger?.log(`${this.prettyName}Navigating to: ${targetPath}`);
     this.router.navigate(targetPath, this.replace || false);
   }
 

@@ -5,6 +5,7 @@ export type TemplateUsage = 'shadow-slots' | 'shadow-full' | 'light-structure' |
 export const ElementalWebComponentMixin = <TBase extends WebComponentConstructor>(Base: TBase) => {
 
   class ElementalWebComponentClass extends Base {
+    declare logger: Console | null;
     //Raw template strings
     public _rawTemplates = new Map<TemplateUsage, string>();
 
@@ -16,6 +17,7 @@ export const ElementalWebComponentMixin = <TBase extends WebComponentConstructor
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
       super(...args);
+      this.logger = this.logger ?? console;
     }
 
     connectedCallback(): void {
@@ -27,7 +29,7 @@ export const ElementalWebComponentMixin = <TBase extends WebComponentConstructor
     public registerTemplates(templates: Map<TemplateUsage, string>): void {
       templates.forEach((htmlString, usage) => {
         if (this._rawTemplates.has(usage)) {
-          console.warn(`[${this.tagName || 'Unnamed Component'}] Template for usage '${usage}' already registered. Overwriting.`)
+          this.logger?.warn(`[${this.tagName || 'Unnamed Component'}] Template for usage '${usage}' already registered. Overwriting.`)
         }
         this._rawTemplates.set(usage, htmlString);
       });
@@ -46,7 +48,7 @@ export const ElementalWebComponentMixin = <TBase extends WebComponentConstructor
 
     public cacheShadowElements(): void {
       if (!this.shadowRoot || this.shadowRoot.children.length === 0) {
-        console.warn(`[${this.tagName}] Attempted to cache shadow elements before ShadowRoot has content.`);
+        this.logger?.warn(`[${this.tagName}] Attempted to cache shadow elements before ShadowRoot has content.`);
         return;
       }
 
@@ -63,7 +65,7 @@ export const ElementalWebComponentMixin = <TBase extends WebComponentConstructor
           this.refs[ref] = el;
         }
       });
-      console.log(`[${this.tagName}] Cached shadow elements (slots: ${Object.keys(this.slots).length} refs: ${Object.keys(this.refs).length})`);
+      this.logger?.log(`[${this.tagName}] Cached shadow elements (slots: ${Object.keys(this.slots).length} refs: ${Object.keys(this.refs).length})`);
 
     }
 
@@ -73,7 +75,7 @@ export const ElementalWebComponentMixin = <TBase extends WebComponentConstructor
       for (const key in this.refs) {
         if (this.refs[key]) {
           this.updatableElements[key] = this.refs[key] as HTMLElement;
-          console.log(`[${this.tagName}] Added data-ref element for key: "${key}"`)
+          this.logger?.log(`[${this.tagName}] Added data-ref element for key: "${key}"`)
         }
       }
 
@@ -98,7 +100,7 @@ export const ElementalWebComponentMixin = <TBase extends WebComponentConstructor
           });
         });
       }
-      console.log(`[${this.tagName}] Total updatable elements collected ${Object.keys(this.updatableElements).length}`)
+      this.logger?.log(`[${this.tagName}] Total updatable elements collected ${Object.keys(this.updatableElements).length}`)
     }
 
 
@@ -106,7 +108,7 @@ export const ElementalWebComponentMixin = <TBase extends WebComponentConstructor
       if (super.disconnectedCallback) {
         super.disconnectedCallback();
       }
-      console.log(`[${this.tagName}] Disconnected.`)
+      this.logger?.log(`[${this.tagName}] Disconnected.`)
     }
   }
   return ElementalWebComponentClass;

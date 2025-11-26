@@ -1,12 +1,13 @@
-import { RootServiceScope } from "../root/root-scope-access";
 import { ServiceScope } from "../root/service-scope";
 import { ContextRequestEvent } from "../events/context-request-event";
 import { SERVICE_SCOPE_CONTEXT_KEY } from "../identifiers/context-keys";
-
 import { WebComponentConstructor } from "@imbui/infuse";
 
 export const ContextProviderMixin = <TBase extends WebComponentConstructor<HTMLElement>>(Base: TBase) =>
   class ContextProvider extends Base {
+    logger!: Console;
+
+    defaultScope: ServiceScope | null = null;
     public providerScope!: ServiceScope;
     public scopeReady: Promise<void>;
     public resolveScope!: () => void;
@@ -32,13 +33,13 @@ export const ContextProviderMixin = <TBase extends WebComponentConstructor<HTMLE
      */
     public setAsRootScopeProvider(rootScope: ServiceScope): void {
       if (this.isRootSet) {
-        console.warn(`[${this.tagName || 'ContextProviderMixin'}] Root scope already explicitly set. Ignoring redundant call.`);
+        this.logger.warn(`[${this.tagName || 'ContextProviderMixin'}] Root scope already explicitly set. Ignoring redundant call.`);
         return;
       }
       this.providerScope = rootScope;
       this.resolveScope();
       this.isRootSet = true;
-      console.log(`[${this.tagName || [ContextProviderMixin]}] Scope explicitly set as root`);
+      this.logger.log(`[${this.tagName || [ContextProviderMixin]}] Scope explicitly set as root`);
     }
 
     connectedCallback() {
@@ -50,14 +51,14 @@ export const ContextProviderMixin = <TBase extends WebComponentConstructor<HTMLE
 
         this.requestParentScope().then(parentScope => {
           this.providerScope = parentScope.fork();
-          console.log(`[${this.tagName}] Initialized scope by forking parent. Parent scope...`)
+          this.logger.log(`[${this.tagName}] Initialized scope by forking parent. Parent scope...`)
           this.resolveScope();
 
         }).catch(error => {
-          console.error(`[${this.tagName}] failed to establish ServiceScope:`, error);
+          this.logger.error(`[${this.tagName}] failed to establish ServiceScope:`, error);
         });
       } else {
-        console.log(`[${this.tagName}] Scope already explicitly set as root. Skipping parent request logic`)
+        this.logger.log(`[${this.tagName}] Scope already explicitly set as root. Skipping parent request logic`)
       }
     }
 
@@ -65,7 +66,7 @@ export const ContextProviderMixin = <TBase extends WebComponentConstructor<HTMLE
     public provideContext<T>(key: symbol, service: T): void {
       this.scopeReady.then(() => {
         this.providerScope.provide(key, service);
-        console.log(`[${this.tagName}] Providing context for key: ${String(key)}`);
+        this.logger.log(`[${this.tagName}] Providing context for key: ${String(key)}`);
       });
     }
 
@@ -76,9 +77,9 @@ export const ContextProviderMixin = <TBase extends WebComponentConstructor<HTMLE
         if (contextKey === SERVICE_SCOPE_CONTEXT_KEY && this.providerScope) {
           callback(this.providerScope);
           event.stopPropagation();
-          console.log(`[${this.tagName}] Provided context scope (${this.providerScope}) to a requester.`);
+          this.logger.log(`[${this.tagName}] Provided context scope (${this.providerScope}) to a requester.`);
         } else {
-          console.log(`[${this.tagName}] Does not have Context for key: ${String(contextKey)}, letting event bubble`);
+          this.logger.log(`[${this.tagName}] Does not have Context for key: ${String(contextKey)}, letting event bubble`);
         }
       });
     };
@@ -93,8 +94,9 @@ export const ContextProviderMixin = <TBase extends WebComponentConstructor<HTMLE
         this.dispatchEvent(requestEvent);
         queueMicrotask(() => {
           if (!resolved) {
-            console.warn(`[${this.tagName}] No parent ContextProvider found for ServiceScope. Falling back to global RootServiceScope`);
-            resolve(RootServiceScope);
+            this.logger.warn(`[${this.tagName}] No parent ContextProvider found for ServiceScope. Falling back to default scope.`);
+            this.defaultScope = new ServiceScope;
+            resolve(this.defaultScope);
           }
         });
       })

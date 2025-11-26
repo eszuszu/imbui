@@ -44,8 +44,10 @@ If you want, you can explore the repo in web container:
 
 [![Try it on StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/eszuszu/imbui)
 
-  - Navigate to 'demo/' with `cd demo`
-  - run `pnpm vite`, the dev server will open index.html in demo.
+  - At the moment built package integration is being tested.
+    - In order for modules to work, run `pnpm build:packages`
+  - Navigate to 'demo/' with `cd demo` or alternatively check out the beginnings of the docs `cd docs`;
+  - run `pnpm vite`, the dev server will open in the working directory.
 ---
 The simplest thing you can do with `imbui` is to grab the `signal` and `effect` primitives from `imbui/pulse`
 ```typescript
@@ -54,7 +56,7 @@ The simplest thing you can do with `imbui` is to grab the `signal` and `effect` 
 // First, import these from 'imbui/pulse'
 import { signal, effect } from '@imbui/pulse';
 
-// We'll going to create a 'signal' to hold our dynamic data.
+// We're going to create a 'signal' to hold our dynamic data.
 // A signal can be any value—a string, number object, etc.
 const myDynamicText = signal('My (maybe) first signal.');
 
