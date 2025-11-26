@@ -95,7 +95,7 @@ export class Link extends LinkInfusion {
     const targetUrl = new URL(targetPath, window.location.href);
 
     if (targetUrl.hostname !== window.location.hostname) {
-      this.logger.log(`${this.prettyName} External link detected: ${targetPath}. Allowing default browser behavior.`);
+      this.logger?.log(`${this.prettyName} External link detected: ${targetPath}. Allowing default browser behavior.`);
       window.open(targetUrl.href, this.anchor.target || '_self');
       return;
     }
@@ -113,7 +113,7 @@ export class Link extends LinkInfusion {
       window.open(targetUrl.href, '_blank');
       return;
     }
-    this.logger.log(`${this.prettyName}Navigating to: ${targetPath}`);
+    this.logger?.log(`${this.prettyName}Navigating to: ${targetPath}`);
     this.router.navigate(targetPath, this.replace || false);
   }
 

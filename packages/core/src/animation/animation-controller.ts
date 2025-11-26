@@ -1,6 +1,5 @@
 import { signal, effect } from "@imbui/pulse";
 import type { Signal } from "@imbui/pulse";
-import type { LoggerService } from "../services/logger-service";
 
 import type { AnimationService } from "../services/animation-service";
 
@@ -19,7 +18,7 @@ export class AnimationController {
   constructor(
     animation: Animation,
     animationService?: AnimationService,
-    logger?: LoggerService,
+    logger?: Console,
   ) {
     this._animation = animation;
 

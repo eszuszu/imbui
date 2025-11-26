@@ -1,6 +1,5 @@
 import { getKeyframeEffect, getDefaultEffectOptions } from "./keyframe-definitions";
 import { AnimationController } from "./animation-controller";
-import type { LoggerService } from "../services/logger-service";
 
 export type AnimationInput = string | { keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: KeyframeAnimationOptions };
 
@@ -9,7 +8,7 @@ export interface DomAnimatorFactory {
 }
 
 interface CreateDomAnimatorOptions {
-  logger?: LoggerService;
+  logger?: Console;
 }
 
 /**

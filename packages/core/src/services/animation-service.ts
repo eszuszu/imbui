@@ -1,8 +1,6 @@
 import { signal, effect } from "@imbui/pulse"
 import type { Signal } from '@imbui/pulse';
 
-import { LoggerService } from './logger-service';
-
 import { createDomAnimator, type DomAnimatorFactory } from '../animation/create-dom-animator';
 import { AnimationController } from "../animation/animation-controller";
 import { registerKeyframeEffect } from "../animation/keyframe-definitions";
@@ -19,7 +17,7 @@ export class AnimationService {
   private _managedAnimations = new Map<string, AnimationController>();
   private _globalPauseState: Signal<boolean>;
   private _globalPlaybackRate: Signal<number>;
-  private _logger: LoggerService;
+  private _logger: Console;
   private _reducedMotion: Signal<boolean>;
 
   private _mediaQueryList: MediaQueryList | null = null;
@@ -28,7 +26,7 @@ export class AnimationService {
   private _cleanupGlobalPauseEffect: (() => void) | null = null;
   private _cleanupGlobalPlaybackRateEffect: (() => void) | null = null;
 
-  constructor(logger: LoggerService) {
+  constructor(logger: Console) {
     this._logger = logger;
     this._domAnimatorFactory = createDomAnimator({ logger: logger });
 

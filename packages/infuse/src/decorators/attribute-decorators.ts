@@ -80,13 +80,13 @@ export function attributeSignal<T>(
     const propName = String(context.name);
     const attrName = attributeName || propName;
 
-    let originalInitialValue: T;
+    let initialValue: T;
 
     context.addInitializer(function (this: This) {
-      originalInitialValue = this[propName] as T;
+      initialValue = this[propName] as T;
 
 
-      this._registerReactiveSignal<T>(propName, originalInitialValue);
+      this._registerReactiveSignal<T>(propName, initialValue);
 
       if (reflect) {
         this.createEffect(() => {
@@ -97,6 +97,7 @@ export function attributeSignal<T>(
             } else {
               this.removeAttribute(attrName);
             }
+            
           } else {
             if (signalValue === null || signalValue === undefined || String(signalValue) === '') {
               this.removeAttribute(attrName);
@@ -132,10 +133,10 @@ export function attributeSignal<T>(
       get(): T {
         const instanceSignal = this._getReactiveSignal<T>(propName);
         if (!instanceSignal) {
-          console.error(`ERROR: Accessor for '${String(propName)}' called before signal was registered by decorator initializer. Returning initial default value.`);
-          return originalInitialValue;
+          // console.error(`ERROR: Accessor for '${String(propName)}' called before signal was registered by decorator initializer. Returning initial default value.`);
+          return initialValue;
         }
-        return instanceSignal.get();
+        return instanceSignal!.get();
       },
       set(value: T): void {
         const instanceSignal = this._getReactiveSignal<T>(propName);

@@ -8,10 +8,10 @@ import {
 import { Signal, signal } from "@imbui/pulse";
 // You can get all of these with just "@imbui/core" too, this is just showcasing the modularity,
 // no need for `imbui/core` grab what you want, or, use what you need~
-import { ElementRegistryService, LoggerService } from "@imbui/core";
+import { ConsoleLogger, ElementRegistryService } from "@imbui/core";
 import { DemoHeader } from "./components/banner/banner";
 
-const logger = new LoggerService();
+const logger = new ConsoleLogger() as Console;
 
 const appInfusion = infuse(
   HTMLElement,
@@ -133,7 +133,7 @@ export const init = elementRegistryService.define(
             this.buttonText.get(),
           ), this.updatableElements['counter'], undefined, this.runtime);
       }
-      logger.log(`${elementRegistryService.constructor.name}`, elementRegistryService.getSnapshot())
+      logger.log(`${elementRegistryService.constructor.name}`, count)
     }
   
     disconnectedCallback(): void {

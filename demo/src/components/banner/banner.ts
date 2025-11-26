@@ -7,7 +7,6 @@ import {
   signal,
   cast,
   die,
-  logged
 } from "@imbui/core";
 
 const HeaderInfusion = infuse(
@@ -29,7 +28,7 @@ export class DemoHeader extends HeaderInfusion {
     this.adoptedStyleSheets = [this.sheet];
   }
 
-  @logged
+
   connectedCallback(): void {
     super.connectedCallback?.();
 
@@ -43,7 +42,6 @@ export class DemoHeader extends HeaderInfusion {
     this.setDisposableInterval(intervalHandler, 4000);
   }
 
-  @logged
   setDisposableInterval(
     handler: () => void,
     ms: number

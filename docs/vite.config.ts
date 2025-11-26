@@ -12,11 +12,8 @@ export default defineConfig({
     outDir: '../dist',
     emptyOutDir: true,
     rollupOptions: {
-      input: {
-        main: resolve(__dirname, './src/pages/index.html'),
-        pages: resolve(__dirname, './src/pages/index.html'),
-        essentials: resolve(__dirname, './src/pages/essentials/index.html')
-      },
-    },
+      
+    }
   },
+
 });

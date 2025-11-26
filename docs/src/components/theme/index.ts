@@ -1,7 +1,12 @@
-import { BaseWebComponentMixin, ElementalWebComponentMixin, infuse, logged, ReactiveWebComponentMixin, signal } from "@imbui/infuse";
+import {
+  BaseWebComponentMixin,
+  ElementalWebComponentMixin,
+  infuse, ReactiveWebComponentMixin,
+  signal
+} from "@imbui/infuse";
 import type { Signal } from "@imbui/infuse";
 import { DOMAwareMixin } from "../primitives";
-import { ImbuedWebComponentMixin } from "@imbui/core";
+import { ImbuedWebComponentMixin, LoggerServiceKey } from "@imbui/core";
 import { cast, die } from "@imbui/core";
 
 const ThemeToggleInfusion = infuse(
@@ -21,13 +26,14 @@ type ThemeType = 'light' | 'dark';
 export class ThemeToggle extends ThemeToggleInfusion {
   theme: Signal<ThemeType> = signal<ThemeType>('light');
   themeToggle: HTMLButtonElement | null = null;
+
   constructor() {
     super();
     cast(slots, this.shadowRoot);
   }
   
-  @logged
-  connectedCallback(): void {
+
+  connectedCallback() {
     this.theme.set(this.getTheme() as ThemeType);
     this.themeToggle = this.querySelector('button');
 
@@ -36,15 +42,17 @@ export class ThemeToggle extends ThemeToggleInfusion {
         this.toggleTheme();
       })
     }
-
-    this.createEffect(() => {
+    this.createEffect( async () => {
       localStorage.setItem('theme', this.theme.get());
       document.documentElement.dataset.theme = this.theme.get();
-      console.log(this.theme.get());
+      await this.getService<Console>(LoggerServiceKey).then((logger: Console) => {
+        this.logger = logger;
+        this.logger.log(this.theme.get());
+      });
     })
   }
 
-  getTheme() {
+  getTheme(): string {
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     if (savedTheme) {

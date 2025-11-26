@@ -13,6 +13,7 @@ export const ReactiveWebComponentMixin = <TBase extends WebComponentConstructor>
     //a Set for the unsubscribe—i.e. `cleanup()`—function for effects
     public _effectCleanups: Set<() => void> = new Set();
 
+    logger: Console | null = null;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
       super(...args);
@@ -65,7 +66,7 @@ export const ReactiveWebComponentMixin = <TBase extends WebComponentConstructor>
 
       this._effectCleanups.forEach(cleanup => cleanup());
       this._effectCleanups.clear();
-      console.log(`[${this.tagName.toLowerCase()}] ReactiveMixin: Cleaned up effects`);
+      this.logger?.log(`[${this.tagName.toLowerCase()}] ReactiveMixin: Cleaned up effects`);
     }
 
     //method to manually disconnect effect if effect is dynamic
