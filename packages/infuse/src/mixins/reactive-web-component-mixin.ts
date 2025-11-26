@@ -13,10 +13,11 @@ export const ReactiveWebComponentMixin = <TBase extends WebComponentConstructor>
     //a Set for the unsubscribe—i.e. `cleanup()`—function for effects
     public _effectCleanups: Set<() => void> = new Set();
 
-    logger: Console | null = null;
+    declare logger: Console | null;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
       super(...args);
+      this.logger = this.logger ?? console;
     }
     _registerReactiveSignal<PropType>(propName: PropertyKey, initialValue: PropType): Signal<PropType> {
       if (!this._reactiveSignals.has(propName)) {
